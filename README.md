@@ -4,6 +4,6 @@ Subject "Auditoría, Calidad y Fiabilidad" Master in the University Complutense 
 
 Maude exercices.
 
-* Authors:
-- Luis María Costero Valero ( @lcosteroucm ) 
-- Jesús Javier Doménech Arellano ( @friker92 )
+## Authors:
+- Luis María Costero Valero
+- Jesús Javier Doménech Arellano
