@@ -1,6 +1,6 @@
 # acf
 
-Subject "Auditoría, Calidad y Fiabilidad" Master in the University Complutense of Madrid.
+Subject "Auditoría, Calidad y Fiabilidad" - University Complutense of Madrid.
 
 Maude exercices.
 
