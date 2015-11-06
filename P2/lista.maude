@@ -1,0 +1,9 @@
+fmod LISTA is
+    pr STRING .
+    sort Lista .
+    subsort String < Lista .
+
+    op lv : -> Lista [ctor] .
+    op _ _ : Lista Lista -> Lista [ctor assoc id: lv] .
+
+endfm

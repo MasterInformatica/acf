@@ -1,0 +1,53 @@
+fmod ARBIN is
+    pr NAT .
+    sort Arbin .
+
+    ---
+    --- Variables
+    ---
+    vars A A1 : Arbin .
+    vars N N1 N2 N3 : Nat .
+    
+    ---
+    --- Constructores
+    ---
+    op av : -> Arbin [ctor] .
+    --- Hijo izq, clave, valor, hijo dcho
+    op Arbin(_ _ _ _) : Arbin Nat Nat Arbin -> Arbin [ctor] .
+    
+    ---
+    --- Operaciones
+    ---
+    op mezcla(_ _) : Nat Nat -> Nat [assoc comm] .
+    eq mezcla(N N1) = N + N1 .
+
+    --- Clave, valor, Arbin
+    op insert(_ _ _) : Nat Nat Arbin -> Arbin .
+    eq insert(N N1 av) = Arbin(av N N1 av) .
+    eq insert(N N1 Arbin(A N N2 A1)) = Arbin(A N mezcla(N1 N2) A1) .
+    ceq insert(N N1 Arbin(A N2 N3 A1)) = Arbin(insert(N N1 A) N2 N3 A1)
+    if N < N2 .
+
+    eq insert(N N1 Arbin(A N2 N3 A1)) = Arbin(A N2 N3 insert(N N1 A1)) [owise] .
+
+    --- Clave, arbol
+    op buscar(_ _) : Nat Arbin ~> Nat .
+    eq buscar(N Arbin(A N N1 A1)) = N1 .
+    ceq buscar(N Arbin(A N1 N2 A1)) = buscar(N A)
+      if N < N1 .
+    ceq buscar(N Arbin(A N1 N2 A1)) = buscar(N A1)
+      if N > N1 .
+
+
+endfm
+
+*** red insert(2 1 Arbin(av 1 1 av)) .
+*** red buscar(3 Arbin(Arbin(av 3 1 av) 5 2 av)) .
+*** red buscar(3 Arbin(av 5 2 av)) .
+*** red buscar(5 Arbin(av 5 2 av)) .
+*** red insert(1 2 av) .
+*** red insert(1 2 Arbin(av 1 1 av)) .
+*** red insert(1 2 Arbin(av 2 1 av)) .
+*** red insert(1 2 Arbin(av 0 1 av)) .
+*** red insert(1 2 Arbin(av 0 1 Arbin(av 1 1 av))) .
+

@@ -1,0 +1,14 @@
+--- Arbin 
+load arbin
+red insert(2 1 Arbin(av 1 1 av)) .
+red buscar(3 Arbin(Arbin(av 3 1 av) 5 2 av)) .
+red buscar(3 Arbin(av 5 2 av)) .
+red buscar(5 Arbin(av 5 2 av)) .
+red insert(1 2 av) .
+red insert(1 2 Arbin(av 1 1 av)) .
+red insert(1 2 Arbin(av 2 1 av)) .
+red insert(1 2 Arbin(av 0 1 av)) .
+red insert(1 2 Arbin(av 0 1 Arbin(av 1 1 av))) .
+
+--- Tienda
+
