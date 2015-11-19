@@ -1,0 +1,56 @@
+mod TABLA is
+    pr STRING .
+    pr CONFIGURATION .
+    pr QID .
+    subsort Qid < Oid .
+
+    sorts Tabla Pareja .
+    subsort Pareja < Tabla .
+
+    op {} : -> Tabla [ctor] .
+    op __ : Tabla Tabla -> Tabla [ctor comm assoc id: {} ] .
+    op {_,_} : String Oid -> Pareja [ctor] .
+
+    vars P P' : Pareja .
+    vars T T' : Tabla .
+    vars S S' : String .
+    vars O O' : Oid .
+
+
+    op insert(_,_) : Pareja Tabla -> Tabla .
+    eq insert(P,{}) = P .
+    eq insert( { S, O }, { S, O' } T) = { S, O } T .
+    eq insert( P, T ) = P T [owise] .
+
+    op delete(_,_) : String Tabla -> Tabla .
+    eq delete(S,{}) = {} .
+    eq delete(S, { S, O } T ) = T .
+    eq delete(S, T ) = T [owise] .
+
+endm
+
+(omod OBJETOS is
+    pr STRING .
+    pr TABLA .
+    
+    sort State .
+    ops inactivo esperando activo : -> State [ctor] .
+    
+    var Q : Qid .
+    
+    class Proceso | datos: Configuration .
+    class Nodo | IP: String, Estado: State .
+    class Centro | tabla: Tabla .
+    class Extremo | centro: Oid .
+    subclass Extremo Centro < Nodo .
+
+    op extremo _ : Qid -> Oid [ctor] .
+    eq extremo Q = < Q : Extremo | centro : null >
+
+
+    
+
+
+endom)
+
+< 'P1 : Proceso | datos : < nodo('P1) : Nodo | IP : "123", Estado : inactivo > >
