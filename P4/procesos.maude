@@ -17,40 +17,127 @@ mod TABLA is
     vars O O' : Oid .
 
 
-    op insert(_,_) : Pareja Tabla -> Tabla .
+    op insert : Pareja Tabla -> Tabla .
     eq insert(P,{}) = P .
     eq insert( { S, O }, { S, O' } T) = { S, O } T .
     eq insert( P, T ) = P T [owise] .
 
-    op delete(_,_) : String Tabla -> Tabla .
+    op delete : String Tabla -> Tabla .
     eq delete(S,{}) = {} .
     eq delete(S, { S, O } T ) = T .
     eq delete(S, T ) = T [owise] .
 
 endm
 
+*** Ejercicio 8
+mod EJEMPLO is 
+    pr CONFIGURATION .
+    pr OBJETOS .
+    
+    ops p1 p2 p3 : Extremo -> Proceso .
+    eq p1 E
+    op c : -> Centro .
+
+    ops ch1 ch2 ch3 : -> Canales .
+    op init : -> Configuration . 
+    eq init = p1 p2 p3 c e1 e2 e3
+
+endm
+
+load full-maude 
 (omod OBJETOS is
     pr STRING .
     pr TABLA .
     
+
+    
+    vars Q Q' : Qid .
+    vars O O' O'' : Oid .
+    vars S S' : String .
+    vars Ob Ob' : Object .
+    vars T T' : Tabla .
+    vars M M' : Msg .
+
+*** Ejercicio 1
+    class Proceso | datos : Configuration .
+*** Ejercicio 2
+    class Nodo | IP : String , Estado : State .
+    op n : Qid -> Oid [ctor] .
+
     sort State .
     ops inactivo esperando activo : -> State [ctor] .
+
+*** Ejercicio 3
+    class Centro | tabla : Tabla .
+    subclass Centro < Nodo .
+    *** y MOD Tabla
+
+*** Ejercicio 4
+    class Extremo | centro : Oid .
+    subclass Extremo < Nodo .
+    op null : -> Oid [ctor] .
     
-    var Q : Qid .
+    op extremo : Qid -> Object . 
+    eq extremo(Q) = < Q : Extremo | centro : null > .
+
+*** Ejercicio 5
+    class Canal | origen : Oid, destino : Oid, listaOrigen : listaMsg, 
+                  listaDestino : listaMsg, estado : EstadoCanal .
     
-    class Proceso | datos: Configuration .
-    class Nodo | IP: String, Estado: State .
-    class Centro | tabla: Tabla .
-    class Extremo | centro: Oid .
-    subclass Extremo Centro < Nodo .
-
-    op extremo _ : Qid -> Oid [ctor] .
-    eq extremo Q = < Q : Extremo | centro : null >
-
-
+    sort EstadoCanal .
+    ops ok error : -> EstadoCanal [ctor] .
     
+    sort listaMsg .
+    subsort Msg < listaMsg .
+    op lmv : -> listaMsg [ctor] .
+    op _|_ : listaMsg listaMsg -> listaMsg [ctor assoc id: lmv ] .
+
+ ***(
+*** TODO : get destino
+   op getDest : Msg Canal ~> Oid .
+    eq getDest( respuesta-info( O, O' ), < ) = O .
+    eq getDest( info( O, S) ) = 
 
 
+    rl [origen-to-channel] : 
+	< O : Canal | origen : O', listaDestino : L , estado : ok >
+	M < O
+)***	
+
+
+*** Ejercicio 6
+    *** info(Self, IP)
+    msg info : Oid String -> Msg .
+   
+    rl [send-info] : 
+	< O : Extremo | Estado : inactivo , IP : S, centro : null > 
+      => 
+	< O : Extremo | Estado : esperando > 
+	info(O, S) .
+
+*** Ejercicio 7
+    *** respuesta-info(To, From)
+    msg respuesta-info : Oid Oid -> Msg .
+
+    *** receive info and send ack-info
+    rl [ack-info] : 
+	info(O, S) 
+	< O' : Centro | tabla : T > 
+      => 
+	< O' : Centro | tabla : T { S,O }, Estado : activo > 
+	respuesta-info( O, O') .
+
+
+    rl [receive-ack-info] : 
+	respuesta-info(O, O') 
+	< O : Extremo | centro : null, Estado : esperando > 
+      => 
+	< O : Extremo | centro : O', Estado : activo > .
+   
 endom)
 
-< 'P1 : Proceso | datos : < nodo('P1) : Nodo | IP : "123", Estado : inactivo > >
+
+***< 'P1 : Proceso | datos : < n('P1) : Nodo | IP : "123", Estado : inactivo > >
+
+
+*** <_:_ | _ > : Object < Configuration
