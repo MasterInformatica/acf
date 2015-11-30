@@ -29,22 +29,10 @@ mod TABLA is
 
 endm
 
-*** Ejercicio 8
-mod EJEMPLO is 
-    pr CONFIGURATION .
-    pr OBJETOS .
-    
-    ops p1 p2 p3 : Extremo -> Proceso .
-***    eq p1 E
-    op c : -> Centro .
-***(
-    ops ch1 ch2 ch3 : -> Canales .
-    op init : -> Configuration . 
-    eq init = p1 p2 p3 c e1 e2 e3
-)***
-endm
-
 load full-maude 
+
+
+
 (omod OBJETOS is
     pr STRING .
     pr TABLA .
@@ -135,6 +123,31 @@ load full-maude
 	< O : Extremo | centro : O', Estado : activo > .
    
 endom)
+
+
+*** Ejercicio 8
+(mod EJEMPLO is 
+    pr CONFIGURATION .
+    pr OBJETOS .
+    pr TABLA .
+
+    var O : Oid .
+
+    op tv : -> Tabla .
+    eq tv = {} .
+
+    ops n1 n2 n3 :  -> Configuration .
+    eq n1 = < n( 'P1 ) : Extremo | IP : "1.1.1.1", Estado : inactivo, centro : null > .
+    eq n2 = < n( 'P2 ) : Extremo | IP : "2.2.2.2", Estado : inactivo, centro : null > .
+    eq n3 = < n( 'P3 ) : Extremo | IP : "3.3.3.3", Estado : inactivo, centro : null > .
+
+    op c : -> Configuration .
+    eq c = < n( 'C ) : Centro | IP : "4.4.4.4", Estado : inactivo, tabla : tv > .
+
+    op inicio : -> Configuration . 
+    eq inicio = c n1 n2 n3 .
+
+endm)
 
 
 *** ( red < 'P1 : Proceso | datos : < n('P1) : Nodo | IP : "123", Estado : inactivo > > . )
