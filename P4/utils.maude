@@ -1,0 +1,30 @@
+mod TABLA is
+    pr STRING .
+    pr CONFIGURATION .
+    pr QID .
+    subsort Qid < Oid .
+
+    sorts Tabla Pareja .
+    subsort Pareja < Tabla .
+
+    op {} : -> Tabla [ctor] .
+    op __ : Tabla Tabla -> Tabla [ctor comm assoc id: {} ] .
+    op {_,_} : String Oid -> Pareja [ctor] .
+
+    vars P P' : Pareja .
+    vars T T' : Tabla .
+    vars S S' : String .
+    vars O O' : Oid .
+
+
+    op insert : Pareja Tabla -> Tabla .
+    eq insert(P,{}) = P .
+    eq insert( { S, O }, { S, O' } T) = { S, O } T .
+    eq insert( P, T ) = P T [owise] .
+
+    op delete : String Tabla -> Tabla .
+    eq delete(S,{}) = {} .
+    eq delete(S, { S, O } T ) = T .
+    eq delete(S, T ) = T [owise] .
+
+endm
