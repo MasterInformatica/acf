@@ -1,9 +1,11 @@
-mod TABLA is
+mod UTILS is
     pr STRING .
     pr CONFIGURATION .
     pr QID .
     subsort Qid < Oid .
 
+*** Ejercicio 3
+ *** TABLA ***
     sorts Tabla Pareja .
     subsort Pareja < Tabla .
 
@@ -27,4 +29,15 @@ mod TABLA is
     eq delete(S, { S, O } T ) = T .
     eq delete(S, T ) = T [owise] .
 
+
+*** Ejercicio 9
+ *** CjtoString ***
+    sort CjtoString .
+    subsort String < CjtoString  .
+    
+    op {""} : -> CjtoString [ctor] .
+    op __ : CjtoString CjtoString -> CjtoString [ctor comm assoc id: {""} ] .
+
 endm
+
+

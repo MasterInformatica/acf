@@ -3,7 +3,6 @@ load procesos.maude
 (mod EJEMPLO is 
     pr CONFIGURATION .
     pr OBJETOS .
-    pr TABLA .
 
     var O : Oid .
 
@@ -11,12 +10,12 @@ load procesos.maude
     eq tv = {} .
 
     ops n1 n2 n3 :  -> Configuration .
-    eq n1 = < n( 'P1 ) : Extremo | IP : "1.1.1.1", Estado : inactivo, centro : null > .
-    eq n2 = < n( 'P2 ) : Extremo | IP : "2.2.2.2", Estado : inactivo, centro : null > .
-    eq n3 = < n( 'P3 ) : Extremo | IP : "3.3.3.3", Estado : inactivo, centro : null > .
+    eq n1 = < n( 'P1 ) : Extremo | IP : "1.1.1.1", Estado : inactivo, centro : null, amigos : {""}, recibido : ""  > .
+    eq n2 = < n( 'P2 ) : Extremo | IP : "2.2.2.2", Estado : inactivo, centro : null, amigos : {""}, recibido : "" > .
+    eq n3 = < n( 'P3 ) : Extremo | IP : "3.3.3.3", Estado : inactivo, centro : null, amigos : {""}, recibido : "" > .
 
     op c : -> Configuration .
-    eq c = < n( 'C ) : Centro | IP : "4.4.4.4", Estado : inactivo, tabla : tv > .
+    eq c = < n( 'C ) : Centro | IP : "4.4.4.4", Estado : inactivo, tabla : tv, amigos : {""}, recibido : "" > .
 
     op inicio : -> Configuration . 
     eq inicio = c n1 n2 n3 .

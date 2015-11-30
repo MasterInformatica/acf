@@ -3,22 +3,26 @@ load full-maude
 
 (omod OBJETOS is
     pr STRING .
-    pr TABLA .
-    
-
+    pr UTILS .
     
     vars Q Q' : Qid .
-    vars O O' O'' : Oid .
+    vars O O' O'' O''' : Oid .
     vars S S' : String .
     vars Ob Ob' : Object .
     vars T T' : Tabla .
     vars M M' : Msg .
+    vars C C' : Configuration . 
+    vars L L' : listaMsg .
 
 *** Ejercicio 1
     class Proceso | datos : Configuration .
-*** Ejercicio 2
-    class Nodo | IP : String , Estado : State .
+*** Ejercicio 2, 10 y 11
+    class Nodo | IP : String , Estado : State , recibido : String, amigos : CjtoString .
     op n : Qid -> Oid [ctor] .
+    *** nodo ( ID , IP)
+    op nodo : Qid String  -> Object .
+    eq nodo( Q, S) = < n(Q) : Nodo | IP : S , Estado : inactivo, recibido : "" , amigos : {""} > .
+    
 
     sort State .
     ops inactivo esperando activo : -> State [ctor] .
@@ -26,7 +30,7 @@ load full-maude
 *** Ejercicio 3
     class Centro | tabla : Tabla .
     subclass Centro < Nodo .
-    *** y MOD Tabla
+    *** y Sort Tabla
 
 *** Ejercicio 4
     class Extremo | centro : Oid .
@@ -48,17 +52,6 @@ load full-maude
     op lmv : -> listaMsg [ctor] .
     op _|_ : listaMsg listaMsg -> listaMsg [ctor assoc id: lmv ] .
 
- ***(
-*** TODO : get destino
-   op getDest : Msg Canal ~> Oid .
-    eq getDest( respuesta-info( O, O' ), < ) = O .
-    eq getDest( info( O, S) ) = 
-
-
-    rl [origen-to-channel] : 
-	< O : Canal | origen : O', listaDestino : L , estado : ok >
-	M < O
-)***	
 
 
 *** Ejercicio 6
@@ -89,6 +82,39 @@ load full-maude
 	< O : Extremo | centro : null, Estado : esperando > 
       => 
 	< O : Extremo | centro : O', Estado : activo > .
+
+*** Ejercicio 12
+    msg to_:_ : String String -> Msg .
+
+*** Ejercicio 13
+    msg to_:_ : Oid String -> Msg .
+
+***     class Canal | origen : Oid, destino : Oid, listaOrigen : listaMsg, 
+***                  listaDestino : listaMsg, estado : EstadoCanal .
+*** Ejercicio 14
+    rl [extremo-to-channel] : 
+	< O : Proceso | datos : C M >
+	< O' : Canal | origen : O, listaDestino : L, estado : ok > 
+      => 
+	< O' : Canal | origen : O, listaDestino : L M, estado : ok > .
+    *** centro = destino
+    rl [centro-to-channel] : 
+	< O : Proceso | datos : C (to O'' : S) >
+	< O' : Canal | origen : O'', destino : O, listaOrigen : L, estado : ok > 
+      => 
+	< O' : Canal | origen : O'', destino : O , listaOrigen : L (to O'' : S), estado : ok > .
+
    
 endom)
 
+ ***(
+*** TODO : get destino
+   op getDest : Msg Canal ~> Oid .
+    eq getDest( respuesta-info( O, O' ), < ) = O .
+    eq getDest( info( O, S) ) = 
+
+
+    rl [origen-to-channel] : 
+	< O : Canal | origen : O', listaDestino : L , estado : ok >
+	M < O
+)***	
