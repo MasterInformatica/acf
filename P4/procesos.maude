@@ -98,42 +98,58 @@ load full-maude
 
 
  *** 14 a) insertar en el canal
-    rl [extremo-to-channel] : 
-	< O : Proceso | datos : C M >
+    *** Solo insertamos si es un mensaje que no tenemos que procesar nosotros (de salida).
+    
+    rl [extremo-to-channel_info] : 
+	< O : Proceso | datos : C info(O, S) >
 	< O' : Canal | origen : O, listaDestino : L, estado : ok > 
       => 
-	< O' : Canal | origen : O, listaDestino : L / M, estado : ok > .
+	< O' : Canal | origen : O, listaDestino : L / info(O, S), estado : ok > .
 
-     *** NO SE SI ESTE IF FUNCIONA. OJO
+    *** Sabemos que es un mensaje al centro porque es string-string
+    rl [extremo-to-channel_to] :
+	< O : Proceso | datos : C to(S : S') >
+	< O' : Canal | origen : O, listaDestino : L, estado : ok >
+      =>
+	< O : Proceso | datos : C >
+	< O' : Canal | origen : O, listaDestino : L / to(S : S') >
+
+	
+    *** NO SE SI ESTE IF FUNCIONA
     crl [centro-to-channel] : 
-	< O : Proceso | datos : C M >
-	< O' : Canal | origen : getDestino(M), destino : O,
-		       listaOrigen : L, estado : ok > 
+     	< O : Proceso | datos : C M >
+     	< O' : Canal | origen : getDestino(M), destino : O, listaOrigen : L, estado : ok > 
       => 
-	< O' : Canal | listaOrigen : L / M > 
-      if getDestino(M) :: Oid .
+     	< O' : Canal | listaOrigen : L / M > 
+      if getDestino(M) :: Oid /\
+	  getDestino(M) =/= O .
+      
+      
+    *** 14 b) extraer del canal.
+    rl [channel-to-extremo] :
+	< O : Proceso | datos : C >
+	< O' : Canal | origen : O, listaOrigen : L / M, estado : ok >
+      =>
+	< O : Proceso | datos : C M >
+	< O' : Canal | listaOrigen : L > .
     
- *** 14 b) extraer del canal
-    *** rl [channel-to-extremo] :
-    *** 	< O : Proceso | datos : C >
-    *** 	< O' : Canal | origen : O, listaOrigen: L' / M , estado: ok >
-    ***   =>
-    *** 	< O : Proceso | datos : C M > 
-    *** 	< O' : Canal | origen : O, listaOrigen: L', estado: ok > .
+    rl [channel-to-centro] :
+	< O : Proceso | datos : C >
+	< O' : Canal | destino : O, listaDestino : L / M, estado : ok >
+      =>
+	< O : Proceso | datos : C M >
+	< O' : Canal | listaDestino : L > .
+    
+    
 
 
 
 
 
-
-
-
-
-    *** Dado un mensaje cualquiera, devuelve el destino. Func, parcial
+    *** Dado un mensaje cualquiera, devuelve el destino. Func. parcial
     op getDestino : Msg ~> Oid .
     eq getDestino(to O : S) = O .
     eq getDestino( respuesta-info( O , O' ) ) = O .
-
 
 
 endom)
