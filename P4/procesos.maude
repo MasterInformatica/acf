@@ -50,7 +50,7 @@ load full-maude
     sort listaMsg .
     subsort Msg < listaMsg .
     op lmv : -> listaMsg [ctor] .
-    op _|_ : listaMsg listaMsg -> listaMsg [ctor assoc id: lmv ] .
+    op _/_ : listaMsg listaMsg -> listaMsg [ctor assoc id: lmv ] .
 
 
 
@@ -73,7 +73,7 @@ load full-maude
 	info(O, S) 
 	< O' : Centro | tabla : T > 
       => 
-	< O' : Centro | tabla : T { S,O }, Estado : activo > 
+	< O' : Centro | tabla : insert({ S,O }, T) , Estado : activo > 
 	respuesta-info( O, O') .
 
 
@@ -91,20 +91,51 @@ load full-maude
 
 ***     class Canal | origen : Oid, destino : Oid, listaOrigen : listaMsg, 
 ***                  listaDestino : listaMsg, estado : EstadoCanal .
+
 *** Ejercicio 14
+    *** extremo = origen
+    *** centro = destino
+
+
+ *** 14 a) insertar en el canal
     rl [extremo-to-channel] : 
 	< O : Proceso | datos : C M >
 	< O' : Canal | origen : O, listaDestino : L, estado : ok > 
       => 
-	< O' : Canal | origen : O, listaDestino : L M, estado : ok > .
-    *** centro = destino
-    rl [centro-to-channel] : 
-	< O : Proceso | datos : C (to O'' : S) >
-	< O' : Canal | origen : O'', destino : O, listaOrigen : L, estado : ok > 
-      => 
-	< O' : Canal | origen : O'', destino : O , listaOrigen : L (to O'' : S), estado : ok > .
+	< O' : Canal | origen : O, listaDestino : L / M, estado : ok > .
 
-   
+     *** NO SE SI ESTE IF FUNCIONA. OJO
+    crl [centro-to-channel] : 
+	< O : Proceso | datos : C M >
+	< O' : Canal | origen : getDestino(M), destino : O,
+		       listaOrigen : L, estado : ok > 
+      => 
+	< O' : Canal | listaOrigen : L / M > 
+      if getDestino(M) :: Oid .
+    
+ *** 14 b) extraer del canal
+    *** rl [channel-to-extremo] :
+    *** 	< O : Proceso | datos : C >
+    *** 	< O' : Canal | origen : O, listaOrigen: L' / M , estado: ok >
+    ***   =>
+    *** 	< O : Proceso | datos : C M > 
+    *** 	< O' : Canal | origen : O, listaOrigen: L', estado: ok > .
+
+
+
+
+
+
+
+
+
+    *** Dado un mensaje cualquiera, devuelve el destino. Func, parcial
+    op getDestino : Msg ~> Oid .
+    eq getDestino(to O : S) = O .
+    eq getDestino( respuesta-info( O , O' ) ) = O .
+
+
+
 endom)
 
  ***(
@@ -118,3 +149,7 @@ endom)
 	< O : Canal | origen : O', listaDestino : L , estado : ok >
 	M < O
 )***	
+
+
+
+
