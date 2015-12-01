@@ -108,11 +108,11 @@ load full-maude
 
     *** Sabemos que es un mensaje al centro porque es string-string
     rl [extremo-to-channel_to] :
-	< O : Proceso | datos : C to(S : S') >
+	< O : Proceso | datos : C (to S : S') >
 	< O' : Canal | origen : O, listaDestino : L, estado : ok >
       =>
 	< O : Proceso | datos : C >
-	< O' : Canal | origen : O, listaDestino : L / to(S : S') >
+	< O' : Canal | origen : O, listaDestino : L / (to S : S') > .
 
 	
     *** NO SE SI ESTE IF FUNCIONA

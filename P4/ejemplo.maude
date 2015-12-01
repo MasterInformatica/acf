@@ -20,6 +20,15 @@ load procesos.maude
     op inicio : -> Configuration . 
     eq inicio = c n1 n2 n3 .
 
+
+    ops p1 p2 p99 : -> Configuration .
+    eq p1 = < 'P1 : Proceso | datos : n1 > .
+    eq p2 = < 'P1 : Proceso | datos : n2 > .
+    eq p99 = < 'C : Proceso | datos : c > .
+
+    op inicio2 : -> Configuration .
+    eq inicio2 = p99 p1 p2 .
+
 endm)
 
 eof
