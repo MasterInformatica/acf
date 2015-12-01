@@ -58,7 +58,7 @@ load full-maude
     *** info(Self, IP)
     msg info : Oid String -> Msg .
    
-    rl [send-info] : 
+    rl [send-info] :
 	< O : Extremo | Estado : inactivo , IP : S, centro : null > 
       => 
 	< O : Extremo | Estado : esperando > 
@@ -69,19 +69,19 @@ load full-maude
     msg respuesta-info : Oid Oid -> Msg .
 
     *** receive info and send ack-info
-    rl [ack-info] : 
-	info(O, S) 
-	< O' : Centro | tabla : T > 
+    rl [ack-receive-info] : 
+	info(n(O), S) 
+	< n(O') : Centro | tabla : T > 
       => 
-	< O' : Centro | tabla : insert({ S,O }, T) , Estado : activo > 
+	< n(O') : Centro | tabla : insert({ S, O }, T) , Estado : activo > 
 	respuesta-info( O, O') .
 
 
     rl [receive-ack-info] : 
 	respuesta-info(O, O') 
-	< O : Extremo | centro : null, Estado : esperando > 
+	< n(O) : Extremo | centro : null, Estado : esperando > 
       => 
-	< O : Extremo | centro : O', Estado : activo > .
+	< n(O) : Extremo | centro : O', Estado : activo > .
 
 *** Ejercicio 12
     msg to_:_ : String String -> Msg .
@@ -101,10 +101,12 @@ load full-maude
     *** Solo insertamos si es un mensaje que no tenemos que procesar nosotros (de salida).
     
     rl [extremo-to-channel_info] : 
-	< O : Proceso | datos : C info(O, S) >
+	< O : Proceso | datos : C info(n(O), S) >
 	< O' : Canal | origen : O, listaDestino : L, estado : ok > 
       => 
-	< O' : Canal | origen : O, listaDestino : L / info(O, S), estado : ok > .
+	< O : Proceso | datos : C >
+	< O' : Canal | origen : O, listaDestino : L / info(n(O), S),
+		       estado : ok > .
 
     *** Sabemos que es un mensaje al centro porque es string-string
     rl [extremo-to-channel_to] :
@@ -112,19 +114,30 @@ load full-maude
 	< O' : Canal | origen : O, listaDestino : L, estado : ok >
       =>
 	< O : Proceso | datos : C >
-	< O' : Canal | origen : O, listaDestino : L / (to S : S') > .
+	< O' : Canal | origen : O, listaDestino : L / (to S : S'), 
+		       estado : ok > .
 
-	
-    *** NO SE SI ESTE IF FUNCIONA
-    crl [centro-to-channel] : 
-     	< O : Proceso | datos : C M >
-     	< O' : Canal | origen : getDestino(M), destino : O, listaOrigen : L, estado : ok > 
+    
+    rl [centro-to-channel_respuesta-info] : 
+     	< O : Proceso | datos : C respuesta-info( O', O ) >
+     	< O'' : Canal | origen : O', destino : O, listaOrigen : L, 
+		       estado : ok > 
       => 
-     	< O' : Canal | listaOrigen : L / M > 
-      if getDestino(M) :: Oid /\
-	  getDestino(M) =/= O .
-      
-      
+     	< O : Proceso | datos : C >
+     	< O'' : Canal | origen : O', destino : O, 
+			listaOrigen : L / respuesta-info ( O', O ), 
+			estado : ok >  .
+
+    rl [centro-to-channel_to] :
+	< O : Proceso | datos : C ( to O' : S ) >
+	< O'' : Canal | origen : O', destino : O, listaOrigen : L,
+			estado : ok >
+      =>
+	< O : Proceso | datos : C >
+	< O'' : Canal | origen : O', destino : O, 
+			listaOrigen : L / ( to O' : S ), estado : ok > .
+
+
     *** 14 b) extraer del canal.
     rl [channel-to-extremo] :
 	< O : Proceso | datos : C >
@@ -138,7 +151,7 @@ load full-maude
 	< O' : Canal | destino : O, listaDestino : L / M, estado : ok >
       =>
 	< O : Proceso | datos : C M >
-	< O' : Canal | listaDestino : L > .
+	< O' : Canal | destino : O, listaDestino : L , estado : ok > .
     
     
 
@@ -147,25 +160,10 @@ load full-maude
 
 
     *** Dado un mensaje cualquiera, devuelve el destino. Func. parcial
-    op getDestino : Msg ~> Oid .
-    eq getDestino(to O : S) = O .
-    eq getDestino( respuesta-info( O , O' ) ) = O .
+    *** op getDestino : Msg ~> Oid .
+    *** eq getDestino(to O : S) = O .
+    *** eq getDestino( respuesta-info( O , O' ) ) = O .
 
 
 endom)
-
- ***(
-*** TODO : get destino
-   op getDest : Msg Canal ~> Oid .
-    eq getDest( respuesta-info( O, O' ), < ) = O .
-    eq getDest( info( O, S) ) = 
-
-
-    rl [origen-to-channel] : 
-	< O : Canal | origen : O', listaDestino : L , estado : ok >
-	M < O
-)***	
-
-
-
 
