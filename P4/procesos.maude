@@ -153,19 +153,42 @@ load full-maude
 	< O : Proceso | datos : C M >
 	< O' : Canal | destino : O, listaDestino : L , estado : ok > .
     
-    
-    *** Ejercicio 15
-    rl [estropea-canal] : 
-	< O : Canal | estado : ok >
-      =>
-	< O : Canal | estado : error > .
-    
-    
 
-    *** Dado un mensaje cualquiera, devuelve el destino. Func. parcial
-    *** op getDestino : Msg ~> Oid .
-    *** eq getDestino(to O : S) = O .
-    *** eq getDestino( respuesta-info( O , O' ) ) = O .
+
+    *** Ejercicio 15
+    ****************************************************************************
+    *** OJO: Esto hay que descomentarlo. Si se deja descomentado se estropea ***
+    *** el canal y no llega ningún mensaje				     ***
+    ****************************************************************************
+***(
+    rl [estropea-canal] : 
+    	< O : Canal | estado : ok >
+      =>
+    	< O : Canal | estado : error > .
+)    
+
+
+
+    *** Ejercicio 16
+    *** TODO
+    *** Duda: como hacemos para que se envie a todos los amigos, pero solo
+    *** 1 y solo 1 vez ???
+
+
+    *** *** Ejercicio 17
+    rl [centro-convierte-to] :
+    	(to S : S' )
+    	< O : Centro | tabla : {S, O'} T , Estado : activo > 
+      =>
+    	< O : Centro | tabla : {S, O'} T , Estado : activo > 
+    	(to O' : S' ) .
+
+    *** *** Ejercicio 18
+    rl [procesa-to-extremo] :
+    	(to O : S)
+    	< O : Nodo | Estado : activo , recibido : S' >
+      =>
+    	< O : Nodo | Estado : activo, recibido : S' S > .
 
 
 endom)

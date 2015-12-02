@@ -9,9 +9,10 @@ mod UTILS is
     sorts Tabla Pareja .
     subsort Pareja < Tabla .
 
+    op {_,_} : String Oid -> Pareja [ctor] .
     op {} : -> Tabla [ctor] .
     op __ : Tabla Tabla -> Tabla [ctor comm assoc id: {} ] .
-    op {_,_} : String Oid -> Pareja [ctor] .
+
 
     vars P P' : Pareja .
     vars T T' : Tabla .
