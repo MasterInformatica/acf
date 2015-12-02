@@ -154,10 +154,13 @@ load full-maude
 	< O' : Canal | destino : O, listaDestino : L , estado : ok > .
     
     
-
-
-
-
+    *** Ejercicio 15
+    rl [estropea-canal] : 
+	< O : Canal | estado : ok >
+      =>
+	< O : Canal | estado : error > .
+    
+    
 
     *** Dado un mensaje cualquiera, devuelve el destino. Func. parcial
     *** op getDestino : Msg ~> Oid .
