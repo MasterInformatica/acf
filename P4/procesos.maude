@@ -4,24 +4,29 @@ load full-maude
 (omod OBJETOS is
     pr STRING .
     pr UTILS .
-    
+    pr NAT .
+
     vars Q Q' : Qid .
     vars O O' O'' O''' : Oid .
-    vars S S' : String .
+    vars S S' S'' : String .
     vars Ob Ob' : Object .
     vars T T' : Tabla .
     vars M M' : Msg .
     vars C C' : Configuration . 
     vars L L' : listaMsg .
+    var CS : CjtoString .
+
 
 *** Ejercicio 1
     class Proceso | datos : Configuration .
 *** Ejercicio 2, 10 y 11
-    class Nodo | IP : String , Estado : State , recibido : String, amigos : CjtoString .
+    class Nodo | IP : String , Estado : State , recibido : String, 
+                 amigos : CjtoString .
     op n : Qid -> Oid [ctor] .
     *** nodo ( ID , IP)
     op nodo : Qid String  -> Object .
-    eq nodo( Q, S) = < n(Q) : Nodo | IP : S , Estado : inactivo, recibido : "" , amigos : {""} > .
+    eq nodo( Q, S) = < n(Q) : Nodo | IP : S , Estado : inactivo, 
+				     recibido : "" , amigos : {""} > .
     
 
     sort State .
@@ -89,14 +94,7 @@ load full-maude
 *** Ejercicio 13
     msg to_:_ : Oid String -> Msg .
 
-***     class Canal | origen : Oid, destino : Oid, listaOrigen : listaMsg, 
-***                  listaDestino : listaMsg, estado : EstadoCanal .
-
 *** Ejercicio 14
-    *** extremo = origen
-    *** centro = destino
-
-
  *** 14 a) insertar en el canal
     *** Solo insertamos si es un mensaje que no tenemos que procesar nosotros (de salida).
     
@@ -155,40 +153,68 @@ load full-maude
     
 
 
-    *** Ejercicio 15
+*** Ejercicio 15
     ****************************************************************************
     *** OJO: Esto hay que descomentarlo. Si se deja descomentado se estropea ***
     *** el canal y no llega ningún mensaje				     ***
     ****************************************************************************
-***(
+ ***(
     rl [estropea-canal] : 
     	< O : Canal | estado : ok >
       =>
     	< O : Canal | estado : error > .
-)    
+  )    
+  
 
 
+*** Ejercicio 16
+  ******************************************************************************
+  *** Explicacion rapida: Para generar un mensaje para cada amigo, usamos	
+  *** una funcion auxiliar que los genera todos a la vez (evitamos duplicados).	
+  *** Pero esto no nos impide que volvamos a generarlos todos a la vez otra vez.
+  *** De hecho, esto debería dar un bucle infinito.				
+  *** vamos al lio a ver si es verdad:						
+  ******************************************************************************
 
-    *** Ejercicio 16
-    *** TODO
-    *** Duda: como hacemos para que se envie a todos los amigos, pero solo
-    *** 1 y solo 1 vez ???
+    op generaHellos : CjtoString -> Configuration .
+    eq generaHellos( S ) = (to S : "hola" ) .
+    eq generaHellos( S CS ) = (to S : "hola") generaHellos( CS ) .
 
 
-    *** *** Ejercicio 17
+    *** OJO: borramos la lista de amigos para no enviar infinitos msgs.
+    *** Chapuza para asegurarnos que los amigos no son vacios XD
+    rl [saluda-amigos] :
+	< O : Extremo | Estado : activo , amigos : S CS > 
+      =>
+	< O : Extremo | Estado : activo , amigos : {""}  > 
+	generaHellos ( S CS ) .
+
+    
+
+*** Ejercicio 17
     rl [centro-convierte-to] :
     	(to S : S' )
     	< O : Centro | tabla : {S, O'} T , Estado : activo > 
       =>
     	< O : Centro | tabla : {S, O'} T , Estado : activo > 
-    	(to O' : S' ) .
+	(to O' : "HOlA" ) .
 
-    *** *** Ejercicio 18
+*** Ejercicio 18
     rl [procesa-to-extremo] :
     	(to O : S)
     	< O : Nodo | Estado : activo , recibido : S' >
       =>
     	< O : Nodo | Estado : activo, recibido : S' S > .
+
+    rl [procesa-to-centro] :
+	(to S : S')
+	< O : Centro | Estado : activo , IP : S , recibido : S'' >
+      =>
+	< O : Centro | Estado : activo , IP : S , recibido : S'' S' > .
+		       
+*** EJercicio 19
+    op numObjetos : Configuration -> Nat .
+    eq numObjetos( Ob C ) = 1 + numObjetos(C) .
 
 
 endom)
