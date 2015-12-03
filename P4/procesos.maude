@@ -23,6 +23,11 @@ load full-maude
     class Nodo | IP : String , Estado : State , recibido : String, 
                  amigos : CjtoString .
     op n : Qid -> Oid [ctor] .
+
+
+    ****************************************************************************
+    *** OJO: HAY QUE CAMBIAR ESTO PORQUE NO SIEMPRE SE EMPIEZA CON AMIGOS VACIOS
+    ****************************************************************************
     *** nodo ( ID , IP)
     op nodo : Qid String  -> Object .
     eq nodo( Q, S) = < n(Q) : Nodo | IP : S , Estado : inactivo, 
@@ -178,41 +183,46 @@ load full-maude
 
     op generaHellos : CjtoString -> Configuration .
     eq generaHellos( S ) = (to S : "hola" ) .
-    eq generaHellos( S CS ) = (to S : "hola") generaHellos( CS ) .
+    eq generaHellos( S - CS ) = (to S : "hola") generaHellos( CS ) .
 
 
     *** OJO: borramos la lista de amigos para no enviar infinitos msgs.
     *** Chapuza para asegurarnos que los amigos no son vacios XD
     rl [saluda-amigos] :
-	< O : Extremo | Estado : activo , amigos : S CS > 
+	< O : Nodo | Estado : activo , amigos : S - CS > 
       =>
-	< O : Extremo | Estado : activo , amigos : {""}  > 
-	generaHellos ( S CS ) .
+	< O : Nodo | Estado : activo , amigos : {""}  > 
+	generaHellos ( S - CS ) .
 
     
 
+
 *** Ejercicio 17
-    rl [centro-convierte-to] :
-    	(to S : S' )
-    	< O : Centro | tabla : {S, O'} T , Estado : activo > 
+    rl [centro-convierte-msg] :
+	( to S : S' )
+	< O : Centro | Estado : activo , tabla : ( { S , O' } ) T >
       =>
-    	< O : Centro | tabla : {S, O'} T , Estado : activo > 
-	(to O' : "HOlA" ) .
+	< O : Centro | Estado : activo , tabla : ( { S , O' } ) T >
+	( to O' : S' ) .
+
+
 
 *** Ejercicio 18
+
     rl [procesa-to-extremo] :
-    	(to O : S)
-    	< O : Nodo | Estado : activo , recibido : S' >
+    	( to O : S )
+    	< n(O) : Extremo | Estado : activo , recibido : S' >
       =>
-    	< O : Nodo | Estado : activo, recibido : S' S > .
+    	< n(O) : Extremo | Estado : activo, recibido : S' + S > .
+
 
     rl [procesa-to-centro] :
 	(to S : S')
 	< O : Centro | Estado : activo , IP : S , recibido : S'' >
       =>
-	< O : Centro | Estado : activo , IP : S , recibido : S'' S' > .
-		       
-*** EJercicio 19
+	< O : Centro | Estado : activo , IP : S , recibido : S'' + S' > .
+
+*** Ejercicio 19
     op numObjetos : Configuration -> Nat .
     eq numObjetos( Ob C ) = 1 + numObjetos(C) .
 

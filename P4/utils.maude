@@ -37,7 +37,7 @@ mod UTILS is
     subsort String < CjtoString  .
     
     op {""} : -> CjtoString [ctor] .
-    op __ : CjtoString CjtoString -> CjtoString [ctor comm assoc id: {""} ] .
+    op _-_ : CjtoString CjtoString -> CjtoString [ctor comm assoc id: {""} ] .
 
 endm
 
