@@ -1,0 +1,14 @@
+*** OJO: Quizas es conveniente declarar los estados iniciales aquí en vez
+*** de en ejemplos.
+
+*** load ejemplo.maude
+*** load props.maude
+
+
+(omod CHECK is
+    pr EJEMPLO .
+    pr MODEL-CHECKER .
+    pr PROPS .
+    pr LTL-SIMPLIFIER .
+
+endom)

@@ -227,5 +227,10 @@ load full-maude
     eq numObjetos( Ob C ) = 1 + numObjetos(C) .
 
 
+*** Ejercicio 20
+    ******************
+    *** OJO: HACER ***
+    ******************
+
 endom)
 

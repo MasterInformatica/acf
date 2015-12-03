@@ -1,0 +1,59 @@
+(omod PROPS is
+    pr SATISFACTION .
+    pr OBJETOS .
+
+    vars O O' : Oid .
+    vars S S' : String .
+    vars C C' : Configuration .
+    vars N N' : Nat .
+    var CS : CjtoString .
+    
+*** Ejercicio 22
+    subsort Configuration < State .
+
+
+*** Ejercicio 23 (propiedades)
+    *** Comprobar si un nodo existe dada su IP
+    op existeNodo : String -> Prop [ctor] .
+    eq < O : Nodo | IP : S > C 
+	|= existeNodo( S ) = true .
+
+    *** Comproar si un nodo tiene cierto amigo con Oid O'
+    op tieneAmigo : Oid -> Prop [ctor] .
+    eq < O : Nodo | amigos : S - CS > < O' : Nodo | IP : S > C
+	|= tieneAmigo( O' ) = true .
+
+    *** Comprobar si existe un mensaje para un nodo con ip S
+    op hayMensajePara : String -> Prop [ctor] .
+    eq ( to S : S' ) < O : Nodo | IP : S > C
+	|= hayMensajePara ( S ) = true .
+    eq ( to O : S' ) < O : Nodo | IP : S > C
+	|= hayMensajePara ( S ) = true .
+
+    *** Comprobar si la cantidad de nodos es la dada por arg.
+    op hayNnodos : Nat -> Prop [ctor] .
+    eq C |= hayNnodos( N ) = 
+	cuentaNodos( C ) == N .
+   
+    op cuentaNodos : Configuration -> Nat . 
+    eq cuentaNodos( < O : Nodo > C ) = 1 + cuentaNodos( C ) .
+    eq cuentaNodos( C ) = 0 [owise] .
+
+    ***  Comrpobar si hay N extremos
+    op hayNextremos : Nat -> Prop [ctor] .
+    eq C |= hayNextremos( N ) =
+	cuentaExtremos( C ) == N .
+
+    op cuentaExtremos : Configuration -> Nat .
+    eq cuentaExtremos( < O : Extremo > C ) = 1 + cuentaExtremos( C ) .
+    eq cuentaExtremos( C ) = 0 [owise] .
+    
+
+    *** Compobar si un canal identificado por un Oid funciona
+    op canalFunciona : Oid -> Prop [ctor] .
+    eq < O : Canal | estado : ok > C
+	|= canalFunciona( O ) = true .
+
+endom)
+	
+	
