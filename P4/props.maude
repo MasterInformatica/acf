@@ -1,0 +1,17 @@
+(omod PROPS is
+    pr SATISFACTION .
+    pr OBJETOS .
+
+    subsort Configuration < State .
+
+    vars S S' : String .
+    vars O O' : Oid .
+    
+    *** Comprueba si existe un nodo con la IP dada
+    op existeNodo : String -> Prop [ctor] .
+    eq < O : Nodo | IP : S >
+	|= existeNodo( S ) = true .
+
+
+
+endom) 

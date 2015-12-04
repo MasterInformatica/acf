@@ -1,0 +1,16 @@
+load model-checker
+load ejemplo
+
+
+load props
+
+
+(omod CHECK is
+    pr PROPS .
+    pr EJEMPLO .
+    pr MODEL-CHECKER .
+    pr LTL-SIMPLIFIER .
+    
+        
+endom)
+( red modelCheck ( inicio2, existeNodo("1.1.1.1") -> existeNodo("2.2.2.2")) . )
