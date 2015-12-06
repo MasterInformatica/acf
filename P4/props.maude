@@ -28,24 +28,20 @@
 
     *** Comprobar si existe un mensaje para un nodo con ip S
     *** NOTA: podemos comprobar si hay un mensaje en un nodo que se envia,
-    *** en un cabnal de salida,
+    *** en un canal de salida,
     *** en un canal de entrada, 
     *** en el centro antes de traducir
     *** en el centro despues de traducir
-    *** en el nodo antes de procesa,
+    *** en el nodo antes de procesar,
     ***....
     *** Aquí comprobamos si ese mensaje existen en un proceso antes de procesar (puede coincidir con el nodo que envia o con el centro)
     *** BORRAR ESTE COMENTARIO
-    ****************
-    *** ARREGLAR ***
-    ****************
     op hayMensajePara : String -> Prop [ctor] .
     eq 	< O : Proceso | datos : ( to S : S' ) C >
 	C'
 	|= hayMensajePara ( S ) = true .
 
-    eq ( to O : S' ) < O : Nodo | IP : S > C
-	|= hayMensajePara ( S ) = true .
+
 
 
     *** Comprobar si la cantidad de nodos es la dada por arg.
