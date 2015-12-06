@@ -2,9 +2,9 @@
     pr SATISFACTION .
     pr OBJETOS .
 
-    vars O O' : Oid .
+    vars O O' O'' O''' : Oid .
     vars S S' : String .
-    vars C C' : Configuration .
+    vars C C' C'' : Configuration .
     vars N N' : Nat .
     var CS : CjtoString .
     
@@ -15,19 +15,38 @@
 *** Ejercicio 23 (propiedades)
     *** Comprobar si un nodo existe dada su IP
     op existeNodo : String -> Prop [ctor] .
-    eq < O : Nodo | IP : S > C |= existeNodo( S ) = true .
+    eq < O : Proceso | datos : < O' : Nodo | IP : S > C > 
+	C' 
+	|= existeNodo( S ) = true .
 
-    *** Comproar si un nodo tiene cierto amigo con Oid O'
+    *** Comproar si un nodo tiene cierto amigo con Oid O'''
     op tieneAmigo : Oid -> Prop [ctor] .
-    eq < O : Nodo | amigos : S - CS > < O' : Nodo | IP : S > C
-	|= tieneAmigo( O' ) = true .
+    eq < O : Proceso | datos : < O' : Nodo | amigos : S - CS > C > 
+	< O'' : Proceso | datos : < O''' : Nodo | IP : S > C' >
+	C''
+	|= tieneAmigo( O''' ) = true .
 
     *** Comprobar si existe un mensaje para un nodo con ip S
+    *** NOTA: podemos comprobar si hay un mensaje en un nodo que se envia,
+    *** en un cabnal de salida,
+    *** en un canal de entrada, 
+    *** en el centro antes de traducir
+    *** en el centro despues de traducir
+    *** en el nodo antes de procesa,
+    ***....
+    *** Aquí comprobamos si ese mensaje existen en un proceso antes de procesar (puede coincidir con el nodo que envia o con el centro)
+    *** BORRAR ESTE COMENTARIO
+    ****************
+    *** ARREGLAR ***
+    ****************
     op hayMensajePara : String -> Prop [ctor] .
-    eq ( to S : S' ) < O : Nodo | IP : S > C
+    eq 	< O : Proceso | datos : ( to S : S' ) C >
+	C'
 	|= hayMensajePara ( S ) = true .
+
     eq ( to O : S' ) < O : Nodo | IP : S > C
 	|= hayMensajePara ( S ) = true .
+
 
     *** Comprobar si la cantidad de nodos es la dada por arg.
     op hayNnodos : Nat -> Prop [ctor] .
@@ -35,7 +54,8 @@
 	cuentaNodos( C ) == N .
    
     op cuentaNodos : Configuration -> Nat . 
-    eq cuentaNodos( < O : Nodo | > C ) = 1 + cuentaNodos( C ) .
+    eq cuentaNodos( < O' : Proceso | datos : < O : Nodo | > C > C' ) 
+      = 1 + cuentaNodos( C C' ) .
     eq cuentaNodos( C ) = 0 [owise] .
 
     ***  Comrpobar si hay N extremos
@@ -44,7 +64,8 @@
 	cuentaExtremos( C ) == N .
 
     op cuentaExtremos : Configuration -> Nat .
-    eq cuentaExtremos( < O : Extremo | > C ) = 1 + cuentaExtremos( C ) .
+    eq cuentaExtremos( < O' : Proceso | datos : < O : Extremo | > C > C' ) 
+      = 1 + cuentaExtremos( C C' ) .
     eq cuentaExtremos( C ) = 0 [owise] .
     
 
