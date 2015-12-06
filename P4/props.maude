@@ -15,8 +15,7 @@
 *** Ejercicio 23 (propiedades)
     *** Comprobar si un nodo existe dada su IP
     op existeNodo : String -> Prop [ctor] .
-    eq < O : Nodo | IP : S > C 
-	|= existeNodo( S ) = true .
+    eq < O : Nodo | IP : S > C |= existeNodo( S ) = true .
 
     *** Comproar si un nodo tiene cierto amigo con Oid O'
     op tieneAmigo : Oid -> Prop [ctor] .
@@ -36,7 +35,7 @@
 	cuentaNodos( C ) == N .
    
     op cuentaNodos : Configuration -> Nat . 
-    eq cuentaNodos( < O : Nodo > C ) = 1 + cuentaNodos( C ) .
+    eq cuentaNodos( < O : Nodo | > C ) = 1 + cuentaNodos( C ) .
     eq cuentaNodos( C ) = 0 [owise] .
 
     ***  Comrpobar si hay N extremos
@@ -45,7 +44,7 @@
 	cuentaExtremos( C ) == N .
 
     op cuentaExtremos : Configuration -> Nat .
-    eq cuentaExtremos( < O : Extremo > C ) = 1 + cuentaExtremos( C ) .
+    eq cuentaExtremos( < O : Extremo | > C ) = 1 + cuentaExtremos( C ) .
     eq cuentaExtremos( C ) = 0 [owise] .
     
 
@@ -55,5 +54,3 @@
 	|= canalFunciona( O ) = true .
 
 endom)
-	
-	
