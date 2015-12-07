@@ -225,12 +225,17 @@ load full-maude
 *** Ejercicio 19
     op numObjetos : Configuration -> Nat .
     eq numObjetos( Ob C ) = 1 + numObjetos(C) .
+    eq numObjetos( C ) = 0 [owise] .
 
 
 *** Ejercicio 20
+    op mismoNumObjetos : Configuration Configuration -> Bool .
+    eq mismoNumObjetos( C, C' ) =
+	numObjetos(C) == numObjetos(C') .
     ******************
     *** OJO: HACER ***
     ******************
+***( search inicio =>* C:Configuration s.t. not mismoNumObjetos(inicio, C) .)    
 
 endom)
 

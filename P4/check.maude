@@ -3,10 +3,7 @@
 
 load model-checker
 load ejemplo
-
-
 load props
-
 
 (omod CHECK is
     pr PROPS .
@@ -16,5 +13,57 @@ load props
     
         
 endom)
-( red modelCheck ( inicio2, existeNodo("1.1.1.1") -> existeNodo("2.2.2.2")) . )
 
+***eof
+
+***Pruebas para el 23
+***( red modelCheck(inicio, existeNodo("1.1.1.1")) . )
+***( red modelCheck(inicio, tieneAmigo(n('P1))) . )
+***( red modelCheck(inicio, <> hayMensajePara("1.1.1.1")) . )
+***( red modelCheck(inicio, hayNnodos(4)) . )
+***( red modelCheck(inicio, hayNextremos(3)) . )
+***( red modelCheck(inicio, canalFunciona('ch1)) . )
+
+
+
+*** Ejercicio 24
+
+  *** NOTA: No soy capaz de hacer pruebas genéricas (sobre N: Nat), así que 
+  *** al final estoy usando casos concretos.
+
+*** La cantidad de nodos no varía
+*** NO FUNFONA :( ( red modelCheck(inicio, [] hayNnodos(4)) . )
+*** ( red modelCheck(inicio, hayNnodos(N: Nat) -> [] hayNnodos(N: Nat)) . )
+
+*** Si un nodo existe y otro lo tiene como amigo, acaba enviando un mensaje
+( red modelCheck(inicio, existeNodo("1.1.1.1") /\ tieneAmigo(n('P1)) -> <> hayMensajePara("1.1.1.1")) . )
+
+
+*** Cualquier mensaje acaba desapareciendo
+*** ( red modelCheck(inicio, hayMensajePara(S: String) -> <> ~ hayMensajePara(S: String)) .)    
+
+
+eof
+
+********************
+*** EJercicio 25 ***
+********************
+Mi primera idea:
+
+    Añadir a los nodos un nuevo atributo que represente una lista de
+nodos a los que se ha enviado un mensaje y todavía no ha habido respuesta.
+Cuando un nodo envía un mensaje a otro nodo, añade en su lista de espera
+al identificador de ese nodo.
+Cuando un nodo recibe un mensaje, comprueba si el origen del mensaje está 
+en su lista o no.
+    a) Si está en su lista, podemos suponer que el mensaje es de respuesta 
+    a uno anterior, por lo que bastaría con eliminar al nodo de esa lista.
+    b) Si el nodo no está en la lista, se supone que ese es un mensaje 
+    normal, por lo que se concatena la información a recibidos y se envia un
+    mensaje de respuesta.
+
+Cosas a modificar:
+    a) Los nodos deberían tener un atributo que represente a los nodos de
+    los que espera respuesta
+    b) Los mesajes deberían llevar un identificador del nodo que los envía,
+    y no solo del destinatario.
