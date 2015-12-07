@@ -1,0 +1,11 @@
+Práctica 4 de ACF, realizada por Luis Mª Costero y Jesús J. Doménech.
+
+La entrega está formada por los siguientes archivos:
+ check.maude: Realiza el análisis. Muestra ejemplos de las propiedades. Ejercicio 25. 
+ ejemplo.maude: Define los estados iniciales de ejemplo.
+ procesos.maude: Define las clases, mensajes y reglas de la práctica.
+ props.maude: Define las propiedades para el análisis.
+ utils.maude: Define las estructuras auxiliares (tabla, CjtoString, ...)
+
+El archivo check.maude importa en el correcto orden el resto de archivos,
+por lo que sólo es necesario cargar este archivo.

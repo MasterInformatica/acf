@@ -19,38 +19,32 @@ load full-maude
 
 *** Ejercicio 1
     class Proceso | datos : Configuration .
+
 *** Ejercicio 2, 10 y 11
     class Nodo | IP : String , Estado : State , recibido : String, 
                  amigos : CjtoString .
     op n : Qid -> Oid [ctor] .
 
-
-    ****************************************************************************
-    *** OJO: HAY QUE CAMBIAR ESTO PORQUE NO SIEMPRE SE EMPIEZA CON AMIGOS VACIOS
-    ****************************************************************************
-    *** nodo ( ID , IP)
-    op nodo : Qid String  -> Object .
-    eq nodo( Q, S) = < n(Q) : Nodo | IP : S , Estado : inactivo, 
-				     recibido : "" , amigos : {""} > .
-    
-
     sort State .
     ops inactivo esperando activo : -> State [ctor] .
+
 
 *** Ejercicio 3
     class Centro | tabla : Tabla .
     subclass Centro < Nodo .
     *** y Sort Tabla
 
+
 *** Ejercicio 4
     class Extremo | centro : Oid .
     subclass Extremo < Nodo .
     op null : -> Oid [ctor] .
     
-    op extremo : Qid -> Object . 
-    eq extremo(Q) = < Q : Extremo | centro : null > .
 
 *** Ejercicio 5
+    *** Se asume que el origen siempre va a ser un extremo, y el destino el centro.
+    *** La listaOrigen guarda los mensajes para el origen (extremo).
+    *** La listaDestino guarda los mensajes para el destino (centro).
     class Canal | origen : Oid, destino : Oid, listaOrigen : listaMsg, 
                   listaDestino : listaMsg, estado : EstadoCanal .
     
@@ -93,16 +87,20 @@ load full-maude
       => 
 	< n(O) : Extremo | centro : O', Estado : activo > .
 
+
 *** Ejercicio 12
     msg to_:_ : String String -> Msg .
 
+
 *** Ejercicio 13
     msg to_:_ : Oid String -> Msg .
+
 
 *** Ejercicio 14
  *** 14 a) insertar en el canal
     *** Solo insertamos si es un mensaje que no tenemos que procesar nosotros (de salida).
     
+    *** Sabemos que O es extremo porque se asume que siempre son origen del canal.
     rl [extremo-to-channel_info] : 
 	< O : Proceso | datos : C info(n(O), S) >
 	< O' : Canal | origen : O, listaDestino : L, estado : ok > 
@@ -131,6 +129,7 @@ load full-maude
 			listaOrigen : L / respuesta-info ( O', O ), 
 			estado : ok >  .
 
+    *** Sabemos que es un mensaje desde el centro porque es Oid-String
     rl [centro-to-channel_to] :
 	< O : Proceso | datos : C ( to O' : S ) >
 	< O'' : Canal | origen : O', destino : O, listaOrigen : L,
@@ -159,10 +158,11 @@ load full-maude
 
 
 *** Ejercicio 15
-    ****************************************************************************
-    *** OJO: Esto hay que descomentarlo. Si se deja descomentado se estropea ***
-    *** el canal y no llega ningún mensaje				     ***
-    ****************************************************************************
+
+    ***************************************************************
+    *** OJO: Si se deja descomentado se estropea el canal y no  ***
+    *** llega ningún mensaje				        ***
+    ***************************************************************
  ***(
     rl [estropea-canal] : 
     	< O : Canal | estado : ok >
@@ -173,21 +173,14 @@ load full-maude
 
 
 *** Ejercicio 16
-  ******************************************************************************
-  *** Explicacion rapida: Para generar un mensaje para cada amigo, usamos	
-  *** una funcion auxiliar que los genera todos a la vez (evitamos duplicados).	
-  *** Pero esto no nos impide que volvamos a generarlos todos a la vez otra vez.
-  *** De hecho, esto debería dar un bucle infinito.				
-  *** vamos al lio a ver si es verdad:						
-  ******************************************************************************
 
+    *** Genera todos los mensajes para todos los amigos antes de enviarlos.
     op generaHellos : CjtoString -> Configuration .
     eq generaHellos( S ) = (to S : "hola" ) .
     eq generaHellos( S - CS ) = (to S : "hola") generaHellos( CS ) .
 
-
-    *** OJO: borramos la lista de amigos para no enviar infinitos msgs.
-    *** Chapuza para asegurarnos que los amigos no son vacios XD
+    *** Para evitar entrar en esta regla infinitas veces, se borra la lista de 
+    *** amigos cuando se envia el primer hello.
     rl [saluda-amigos] :
 	< O : Nodo | Estado : activo , amigos : S - CS > 
       =>
@@ -195,7 +188,6 @@ load full-maude
 	generaHellos ( S - CS ) .
 
     
-
 
 *** Ejercicio 17
     rl [centro-convierte-msg] :
@@ -208,7 +200,6 @@ load full-maude
 
 
 *** Ejercicio 18
-
     rl [procesa-to-extremo] :
     	( to O : S )
     	< n(O) : Extremo | Estado : activo , recibido : S' >
@@ -222,22 +213,22 @@ load full-maude
       =>
 	< O : Centro | Estado : activo , IP : S , recibido : S'' + S' > .
 
+
 *** Ejercicio 19
     op numObjetos : Configuration -> Nat .
     eq numObjetos( Ob C ) = 1 + numObjetos(C) .
     eq numObjetos( C ) = 0 [owise] .
 
 
-*** Ejercicio 20
-    op mismoNumObjetos : Configuration Configuration -> Bool .
-    eq mismoNumObjetos( C, C' ) =
-	numObjetos(C) == numObjetos(C') .
-    ******************
-    *** OJO: HACER ***
-    ******************
-
-***( search inicio =>* C:Configuration s.t. 
-         numObjetos(inicio) =/= numObjetos(C) .)    
-
 endom)
 
+
+eof
+*** Ejercicio 21
+
+( search inicio =>* C:Configuration s.t. 
+      numObjetos(inicio) =/= numObjetos(C:Configuration) .)    
+
+   *** Inicio2 solo tiene 3 nodos
+( search inicio2 =>* C:Configuration s.t. 
+      numObjetos(inicio2) =/= numObjetos(C:Configuration) .)    

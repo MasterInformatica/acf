@@ -19,7 +19,7 @@
 	C' 
 	|= existeNodo( S ) = true .
 
-    *** Comproar si un nodo tiene cierto amigo con Oid O'''
+    *** Comprobar si un nodo tiene cierto amigo con Oid O'''
     op tieneAmigo : Oid -> Prop [ctor] .
     eq < O : Proceso | datos : < O' : Nodo | amigos : S - CS > C > 
 	< O'' : Proceso | datos : < O''' : Nodo | IP : S > C' >
@@ -27,20 +27,18 @@
 	|= tieneAmigo( O''' ) = true .
 
     *** Comprobar si existe un mensaje para un nodo con ip S
-    *** NOTA: podemos comprobar si hay un mensaje en un nodo que se envia,
-    *** en un canal de salida,
-    *** en un canal de entrada, 
-    *** en el centro antes de traducir
-    *** en el centro despues de traducir
-    *** en el nodo antes de procesar,
-    ***....
-    *** Aquí comprobamos si ese mensaje existen en un proceso antes de procesar (puede coincidir con el nodo que envia o con el centro)
-    *** BORRAR ESTE COMENTARIO
+    *** NOTA: Podemos comprobarlo de diferentes maneras:
+    *** Si existe en un nodo emisor,
+    *** en un canal (tanto de entrada como de salida),
+    *** en el centro antes de traducirlo a to(Oid : S)
+
+    *** En este caso, comprobamos si el mensaje existe en un proceso
+    *** antes de ser traducido (puede coincidir con el nodo emisor o 
+    *** con el centro).
     op hayMensajePara : String -> Prop [ctor] .
     eq 	< O : Proceso | datos : ( to S : S' ) C >
 	C'
 	|= hayMensajePara ( S ) = true .
-
 
 
 
@@ -53,6 +51,7 @@
     eq cuentaNodos( < O' : Proceso | datos : < O : Nodo | > C > C' ) 
       = 1 + cuentaNodos( C C' ) .
     eq cuentaNodos( C ) = 0 [owise] .
+
 
     ***  Comrpobar si hay N extremos
     op hayNextremos : Nat -> Prop [ctor] .

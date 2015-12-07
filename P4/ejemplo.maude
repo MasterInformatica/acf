@@ -1,11 +1,7 @@
 load procesos.maude
 
-*********************************************************************************
-*** OJO, este ejercicio ha variado mucho, y hay que rehacerle. Importante que ***
-*** este es una mezcla de los ejercios:					      ***
-***     8 y 20 (si alguno más lo modifica ahora mmismo no me acuerdo	      ***
-*********************************************************************************
-*** Ejercicio 8
+
+*** Ejercicio 8 y 20
 (mod EJEMPLO is 
     pr CONFIGURATION .
     pr OBJETOS .
@@ -18,10 +14,10 @@ load procesos.maude
 
     
     *** Constructores de extremo
-    ops n1 n2 n3 :  -> Configuration .
-    eq n1 = < n( 'P1 ) : Extremo | IP : "1.1.1.1", Estado : inactivo, centro : null, amigos : "2.2.2.2" - "4.4.4.4", recibido : ""  > .
-    eq n2 = < n( 'P2 ) : Extremo | IP : "2.2.2.2", Estado : inactivo, centro : null, amigos : "1.1.1.1" - "4.4.4.4", recibido : "" > .
-    eq n3 = < n( 'P3 ) : Extremo | IP : "3.3.3.3", Estado : inactivo, centro : null, amigos : "1.1.1.1" - "2.2.2.2", recibido : "" > .
+    ops e1 e2 e3 :  -> Configuration .
+    eq e1 = < n( 'P1 ) : Extremo | IP : "1.1.1.1", Estado : inactivo, centro : null, amigos : "2.2.2.2" - "4.4.4.4", recibido : "" > .
+    eq e2 = < n( 'P2 ) : Extremo | IP : "2.2.2.2", Estado : inactivo, centro : null, amigos : "1.1.1.1" - "4.4.4.4", recibido : "" > .
+    eq e3 = < n( 'P3 ) : Extremo | IP : "3.3.3.3", Estado : inactivo, centro : null, amigos : "1.1.1.1" - "2.2.2.2", recibido : "" > .
 
     *** Constructor de centro
     op c : -> Configuration .
@@ -29,11 +25,11 @@ load procesos.maude
 
 
     *** Contructores de procesos que encapsulan los nodos anteriores
-    ops p1 p2 p3 p99 : -> Configuration .
-    eq p1 = < 'P1 : Proceso | datos : n1 > .
-    eq p2 = < 'P2 : Proceso | datos : n2 > .
-    eq p3 = < 'P3 : Proceso | datos : n3 > .
-    eq p99 = < 'C : Proceso | datos : c > .
+    ops p1 p2 p3 pC : -> Configuration .
+    eq p1 = < 'P1 : Proceso | datos : e1 > .
+    eq p2 = < 'P2 : Proceso | datos : e2 > .
+    eq p3 = < 'P3 : Proceso | datos : e3 > .
+    eq pC = < 'C : Proceso | datos : c > .
 
     *** Constructores de canal
     ops ch1 ch2 ch3 : -> Configuration .
@@ -47,41 +43,9 @@ load procesos.maude
 
     *** Configuraciones iniciales
     op inicio : -> Configuration .  *** 3 extremos + centro
-    eq inicio = p99 p1 p2 p3 ch1 ch2 ch3 .
+    eq inicio = pC p1 p2 p3 ch1 ch2 ch3 .
 
     op inicio2 : -> Configuration . *** 2 extremos + centro
-    eq inicio2 = p99 p1 p2 ch1 ch2 .
+    eq inicio2 = pC p1 p2 ch1 ch2 .
 
-
-    *** Configuraciones finales que corresponden
-    ops fin fin2 : -> Configuration .
-    eq fin = 
-	< 'C : Proceso | datos : < n('C) : Centro | Estado : activo,
-	IP : "4.4.4.4" , amigos : {""} , recibido : "holahola" ,
-	tabla : ( { "1.1.1.1" , 'P1 } { "2.2.2.2" , 'P2 } { "3.3.3.3" , 'P3 } ) > > < 'P1 : Proceso | datos : < n('P1): Extremo | Estado :
-    activo , IP : "1.1.1.1" , amigos : {""} , centro : 'C , recibido : "holaholahola" > > < 'P2 : Proceso | datos : < n('P2) : Extremo | Estado : activo , IP :
-    "2.2.2.2" , amigos : {""} , centro : 'C , recibido : "holaholahola" > > < 'P3 : Proceso | datos : < n('P3) : Extremo | Estado : activo , IP : "3.3.3.3" , amigos : {""} , centro : 'C , recibido : "" > > < 'ch1 : Canal | destino : 'C , estado : ok , listaDestino : lmv , listaOrigen : lmv , origen : 'P1 > < 'ch2 : Canal |
-    destino : 'C , estado : ok , listaDestino : lmv , listaOrigen : lmv , origen : 'P2 > < 'ch3 : Canal | destino : 'C , estado : ok , listaDestino : lmv , listaOrigen : lmv , origen : 'P3 > .
-
-
-    eq fin2 =   
-< 'C : Proceso | datos : < n('C): Centro | Estado : activo,IP : "4.4.4.4",
-    amigos :{""},recibido : "holahola",tabla :({"1.1.1.1",'P1}{"2.2.2.2",'P2})>
-    > < 'P1 : Proceso | datos : < n('P1): Extremo | Estado : activo,IP :
-    "1.1.1.1",amigos :{""},centro : 'C,recibido : "holahola" > > < 'P2 :
-    Proceso | datos : < n('P2): Extremo | Estado : activo,IP : "2.2.2.2",amigos
-    :{""},centro : 'C,recibido : "holahola" > > < 'ch1 : Canal | destino : 'C,
-    estado : ok,listaDestino : lmv,listaOrigen : lmv,origen : 'P1 > < 'ch2 :
-    Canal | destino : 'C,estado : ok,listaDestino : lmv,listaOrigen : lmv,
-    origen : 'P2 > .
 endm)
-
-eof
-
-
-
-
-
-( rew inicio . )
-
-( rew < 'P1 : Proceso | datos : < n('P1) : Nodo | IP : "123", Estado : inactivo > > . )

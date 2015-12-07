@@ -1,6 +1,3 @@
-*** OJO: Quizas es conveniente declarar los estados iniciales aquí en vez
-*** de en ejemplos.
-
 load model-checker
 load ejemplo
 load props
@@ -8,6 +5,8 @@ load props
 (omod CHECK is
     pr PROPS .
     pr EJEMPLO .
+    *** EJEMPLO contiene la definicion de las configuraciones iniciales.
+
     pr MODEL-CHECKER .
     pr LTL-SIMPLIFIER .
     
@@ -17,53 +16,85 @@ endom)
 ***eof
 
 ***Pruebas para el 23
-***( red modelCheck(inicio, existeNodo("1.1.1.1")) . )
-***( red modelCheck(inicio, tieneAmigo(n('P1))) . )
-***( red modelCheck(inicio, <> hayMensajePara("1.1.1.1")) . )
-***( red modelCheck(inicio, hayNnodos(4)) . )
-***( red modelCheck(inicio, hayNextremos(3)) . )
-***( red modelCheck(inicio, canalFunciona('ch1)) . )
+( red modelCheck(inicio, existeNodo("1.1.1.1")) . )
+( red modelCheck(inicio, tieneAmigo(n('P1))) . )
+( red modelCheck(inicio, <> hayMensajePara("1.1.1.1")) . )
+( red modelCheck(inicio, hayNnodos(4)) . )
+( red modelCheck(inicio, hayNextremos(3)) . )
+( red modelCheck(inicio, canalFunciona('ch1)) . )
 
-
+***eof
 
 *** Ejercicio 24
-
-  *** NOTA: No soy capaz de hacer pruebas genéricas (sobre N: Nat), así que 
-  *** al final estoy usando casos concretos.
+*** Como para 4 nodos el proceso es muy lento, también se dan ejemplos
+*** para 3 nodos (representado por el estado inicio2)
 
 *** La cantidad de nodos no varía
-*** NO FUNFONA :( ( red modelCheck(inicio, [] hayNnodos(4)) . )
-*** ( red modelCheck(inicio, hayNnodos(N: Nat) -> [] hayNnodos(N: Nat)) . )
+***( red modelCheck(inicio, [] hayNnodos(4)) . )
+( red modelCheck(inicio2, [] hayNnodos(3)) . )
+
+***(
+    Esta propiedad siempre es cierta, ya que no existe ninguna regla
+    que elimine o cree nodos.
+    )
+
 
 *** Si un nodo existe y otro lo tiene como amigo, acaba enviando un mensaje
 ( red modelCheck(inicio, existeNodo("1.1.1.1") /\ tieneAmigo(n('P1)) -> <> hayMensajePara("1.1.1.1")) . )
 
 
+***(
+    Si un canal se estropea antes de que el extremo este activo, es decir,
+    se hayan enviado y recibido correctamente los mensajes info y 
+    respuesta-info, el extremo no llegará a generar los mensajes para sus
+    amigos, por lo que la propiedad es falsa.
+    Para los demas casos esta propiedad es cierta dado que consideramos que
+    se envia un mensaje en el momento de crearse, por mucho que los canales 
+    estén estropeados y el mensaje no llegue, la regla de enviar mensajes a
+    los amigos siempre se podrá ejecutar.
+    )
+
 *** Cualquier mensaje acaba desapareciendo
-*** ( red modelCheck(inicio, hayMensajePara(S: String) -> <> ~ hayMensajePara(S: String)) .)    
+( red modelCheck(inicio, []( hayMensajePara("1.1.1.1") -> 
+  <> ~ hayMensajePara("1.1.1.1")) ) .)    
+
+***(
+    Si un extremo crea un mensaje, pero el canal se encuentra con
+    error, el mensaje nuna será procesado, y por tanto no desaparecerá.
+    )
 
 
 eof
 
 ********************
-*** EJercicio 25 ***
+*** Ejercicio 25 ***
 ********************
-Mi primera idea:
-
-    Añadir a los nodos un nuevo atributo que represente una lista de
-nodos a los que se ha enviado un mensaje y todavía no ha habido respuesta.
-Cuando un nodo envía un mensaje a otro nodo, añade en su lista de espera
-al identificador de ese nodo.
-Cuando un nodo recibe un mensaje, comprueba si el origen del mensaje está 
-en su lista o no.
-    a) Si está en su lista, podemos suponer que el mensaje es de respuesta 
-    a uno anterior, por lo que bastaría con eliminar al nodo de esa lista.
-    b) Si el nodo no está en la lista, se supone que ese es un mensaje 
-    normal, por lo que se concatena la información a recibidos y se envia un
-    mensaje de respuesta.
+Añadir a los nodos un nuevo atributo que represente una lista de nodos a los que
+se ha enviado un mensaje y todavía no se ha recibido respuesta, y un nuevo tipo
+de mensaje denominado ACK que representa las respuestas. Cuando un nodo envía un
+mensaje a otro nodo, añade en su lista de espera al identificador de ese nodo. 
+Cuando un nodo recibe un mensaje:
+    a) Si el mensaje es ACK, elimina a ese nodo de su lista de espera.
+    b) En caso contrario, genera un mensaje ACK.
 
 Cosas a modificar:
     a) Los nodos deberían tener un atributo que represente a los nodos de
-    los que espera respuesta
+    los que espera respuesta.
     b) Los mesajes deberían llevar un identificador del nodo que los envía,
     y no solo del destinatario.
+    c) Crear un nuevo tipo de mensajes ACK, que represente a las respuestas.
+
+
+Para definir la propiedad que compruebe que todos los mensajes recibidos tienen
+respuesta, creamos la propiedad esperaRespuesta(O), que es cierta cuando el nodo O
+se encuentra esperando algún mensaje de respuesta.
+
+Para comprobar que todos los mensajes son respondidos, se podría utilizar la siguiente
+fórmula: 
+
+    [] ( <> esperaRespuesta(n('P1)) -> <> ~ esperaRespuesta(n('P1)) )
+
+Otra forma de comprobarlo es comprobando directamente los mensajes:
+
+    [] ( <> hayMensajeDePara(n('P1),n('P2)) -> <> hayAckDePara(n('P2),n('P1)) )
+
