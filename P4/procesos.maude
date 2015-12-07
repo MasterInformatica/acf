@@ -235,7 +235,9 @@ load full-maude
     ******************
     *** OJO: HACER ***
     ******************
-***( search inicio =>* C:Configuration s.t. not mismoNumObjetos(inicio, C) .)    
+
+***( search inicio =>* C:Configuration s.t. 
+         numObjetos(inicio) =/= numObjetos(C) .)    
 
 endom)
 
