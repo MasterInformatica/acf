@@ -2,7 +2,7 @@
 
 Subject "Auditoría, Calidad y Fiabilidad" - University Complutense of Madrid.
 
-Maude exercices.
+Maude exercises.
 
 ## Authors:
 - Luis María Costero Valero
