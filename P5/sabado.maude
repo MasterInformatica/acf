@@ -1,0 +1,124 @@
+
+mod FIESTA is
+    pr NAT .
+    pr STRING .
+    pr BOOL .
+
+    sorts Cjto Lista .
+
+    op lv : -> Lista [ctor] .
+    op _-_ : Persona Lista -> Lista [ctor assoc id: lv ] .
+
+    op cv : -> Cjto [ctor] .
+    op __ : Persona Cjto -> Cjto [ctor assoc comm id: cv ] .
+
+    op len : Cjto -> Nat .
+    eq len(cv) = 0 .
+    eq len( P C ) = 1 + len(C) .
+
+    sorts Bolsa Persona .
+    sort Vipedad .
+    ops vip novip : -> Vipedad [ctor] .
+
+    *** < Alcohol, Refrescos, Hielo >
+    op <_,_,_> : Nat Nat Nat -> Bolsa [ctor] . 
+    
+    *** p(Nombre,Edad,Bolsa,Vipedad,Bebidas)
+    ops p manager : String Nat Bolsa Vipedad Nat -> Persona [ctor] . 
+    op dabi : -> Persona  .
+    eq dabi = manager( "Dabi", 23, < 0, 0, 0 >, vip, 0 ) .
+    
+    op isVip : Persona -> Bool .
+    eq isVip( p(S, E, V, vip, N ) ) = true .
+    eq isVip( P ) = false [owise] .
+
+    *** lugares
+    sorts Botellon Cola Local .
+    subsort Botellon < Cjto .
+    subsort Persona < Botellon Cola Cjto Lista .
+
+
+    sort Estado .
+    op [_,_,_] : Botellon Cola Local -> Estado [ctor] .
+
+
+    *** local( Aforo, Alcohol, Refresco, Personas )
+    op local : Nat Nat Nat Cjto -> Local [ctor] .
+
+    
+    op completo : Local -> Bool .
+    eq completo( N, N1, N2, C) = N == len(C) .
+
+    *** vip | novip *** crece hacia la derecha
+    op _|_ : Lista Lista -> Cola [ctor] .
+    
+    op inserta : Persona Cola -> Cola .
+    ceq inserta(P, Li | Li' ) = Li | Li' P
+      if not isVip(P) .
+    eq inserta(P, Li | Li' ) = ( Li P ) | Li' [owise] .
+
+
+    vars P P' : Persona .
+
+    vars Q Q' : Cola .
+    vars Li Li' : Lista .
+
+    vars B B' : Botellon .
+    vars L L' : Local .
+
+
+
+    vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
+
+    vars V V' : Bolsa . *** Volsa xD
+    vars S S' : String .
+    vars W W' : Vipedad .
+    vars St St' : Estado .
+
+
+
+    *** Beber Refresco
+    rl [refresco-botellon-propio] :
+	p( S, E, < N, s(N1), s(O) > , W, N2 ) B 
+      => 
+	p( S, E, < N, N1, O > , W, N2 ) B .
+    
+    rl [refresco-botellon-ajeno] :
+	p( S, E, < N, s(N1), 0 > , W, N2 )  
+	p( S', E', < N3, N4, s(O') > , W', N5 ) B 
+      => 
+	p( S, E, < N, N1, 0 > , W, N2 ) 
+	p( S', E', < N3, N4, O' > , W', N5 ) B .
+    
+    *** Beber Cubata
+    rl [cubata-botellon-propio] :
+	p( S, E, < s(N), s(N1), s(O) > , W, N2 ) B 
+      => 
+	p( S, E, < N, N1, O > , W, s(N2) ) B .
+    
+    rl [cubata-botellon-ajeno] :
+	p( S, E, < s(N), s(N1), 0 > , W, N2 )  
+	p( S', E', < N3, N4, s(O') > , W', N5 ) B 
+      => 
+	p( S, E, < N, N1, 0 > , W, s(N2) ) 
+	p( S', E', < N3, N4, O' > , W', N5 ) B .
+
+    
+    rl [botellon-to-cola] : 
+	[ P B, Q, L ]
+      =>
+	[ B, inserta(P, Q ) , L ] .
+    
+
+    crl [cola-to-local] : *** TODO!!!!!
+	[ B, Q, L] 
+      => 
+	[ B, Q', insertar( P, L )]
+    if 	{ P, Q' } := pop(Q) /\
+	  not completo(L) /\
+	  not empty(Q) .
+
+    
+
+
+endm
