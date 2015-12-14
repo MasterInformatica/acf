@@ -4,6 +4,10 @@ mod FIESTA is
     pr STRING .
     pr BOOL .
 
+
+******************************
+*** Estrucutras auxiliares ***
+******************************
     sorts Cjto Lista .
 
     op lv : -> Lista [ctor] .
@@ -13,8 +17,8 @@ mod FIESTA is
     op __ : Persona Cjto -> Cjto [ctor assoc comm id: cv ] .
 
     op len : Cjto -> Nat .
-    eq len(cv) = 0 .
-    eq len( P C ) = 1 + len(C) .
+    eq len( cv ) = 0 .
+    eq len( P C ) = 1 + len( C ) .
 
     sorts Bolsa Persona .
     sort Vipedad .
@@ -22,11 +26,25 @@ mod FIESTA is
 
     *** < Alcohol, Refrescos, Hielo >
     op <_,_,_> : Nat Nat Nat -> Bolsa [ctor] . 
-    
+
+*** Personas ***
+*** Contemplamos 3 tipos de persona. El manager, las personas con bolsa
+*** y las personas sin bola (las penultimas se pueden convertir en las ultimas)    
     *** p(Nombre,Edad,Bolsa,Vipedad,Bebidas)
-    ops p manager : String Nat Bolsa Vipedad Nat -> Persona [ctor] . 
+    op p : String Nat Bolsa Vipedad Nat -> Persona [ctor] . 
+    ops pSB manager : String Nat Nat -> Persona [ctor] .
+
     op dabi : -> Persona  .
-    eq dabi = manager( "Dabi", 23, < 0, 0, 0 >, vip, 0 ) .
+    eq dabi = manager( "Dabi", 23, 0 ) .
+
+    op pTopSB : Persona -> Persona .
+    eq pTopSB( p(S, E, V, W, N) ) = pSB(S, E, N) .
+    eq pTopSB( P ) = P [owise] .
+    
+    op edad : Persona -> Nat .
+    eq edad( p(S, E, V, W, N )) = E .
+    eq edad( manager(S, E, N)) = E .
+    eq edad( pSB(S, E, N)) = E .
     
     op isVip : Persona -> Bool .
     eq isVip( p(S, E, V, vip, N ) ) = true .
@@ -42,31 +60,75 @@ mod FIESTA is
     op [_,_,_] : Botellon Cola Local -> Estado [ctor] .
 
 
+*** local ***
     *** local( Aforo, Alcohol, Refresco, Personas )
-    op local : Nat Nat Nat Cjto -> Local [ctor] .
-
+    op l : Nat Nat Nat Cjto -> Local [ctor] .
     
     op completo : Local -> Bool .
-    eq completo( N, N1, N2, C) = N == len(C) .
+    eq completo( l(N, N1, N2, C)) = N == len(C) .
 
+
+    op insertaLocal : Persona Local -> Local .
+    ceq insertaLocal( P,  l(N, N1, N2, C)) = 
+	l(N, N1, N2, pTopSB(P) C) 
+      if not completo( l(N, N1, N2, C)) .
+    eq insertaLocal(P, L) = L [owise] .
+
+
+    op puedePasar : Persona -> Bool .
+    ceq puedePasar( p(S, E, V, W, N) ) = true 
+      if E > 17 /\
+	  N < 3 .
+    eq puedePasar( P ) = false [owise] .
+
+
+*** Cola ***
     *** vip | novip *** crece hacia la derecha
     op _|_ : Lista Lista -> Cola [ctor] .
     
-    op inserta : Persona Cola -> Cola .
-    ceq inserta(P, Li | Li' ) = Li | Li' P
+    op empty : Cola -> Bool .
+    eq empty(cv | cv) = true .
+    eq empty(Q) = false [owise] .
+
+    op insertaCola : Persona Cola -> Cola .
+    ceq insertaCola(P, Li | Li' ) = Li | Li' P
       if not isVip(P) .
-    eq inserta(P, Li | Li' ) = ( Li P ) | Li' [owise] .
+    eq insertaCola(P, Li | Li' ) = ( Li P ) | Li' [owise] .
 
 
+    sort Pareja .
+    op {_, _} : Persona Cola -> Pareja [ctor] .
+    
+    op pop : Cola ~> Pareja .
+    eq pop( (P Q) | Q' ) = {P, (Q | Q') } .
+    eq pop( cv | (P Q) ) = {P, (cv | Q) } .
+
+
+**************************
+*** Ejemplos de inicio ***
+**************************
+
+    ops mike peter lucille : -> Persona .
+    eq mike = p("Mike", 23, <1, 2, 3>, vip, 0 ) .
+    eq peter = p("Peter", 20, <2, 2, 1>, vip, 0 ) .
+    eq lucille = p("Lucille", 16, <2, 1, 0>, noVip, 0 ) .
+
+    *** op local : -> Local .
+    *** eq local = l(5, 6, 5, dave) .
+    *** op inicio : -> Estado .
+    *** eq inicio = [ mike peter lucille, cv, local ] .
+
+*****************
+*** Variables ***
+*****************
     vars P P' : Persona .
 
     vars Q Q' : Cola .
     vars Li Li' : Lista .
+    vars C C' : Cjto .
 
     vars B B' : Botellon .
     vars L L' : Local .
-
-
 
     vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
 
@@ -76,6 +138,9 @@ mod FIESTA is
     vars St St' : Estado .
 
 
+******************************
+*** Reglas, comportamiento ***
+******************************
 
     *** Beber Refresco
     rl [refresco-botellon-propio] :
@@ -103,22 +168,63 @@ mod FIESTA is
 	p( S, E, < N, N1, 0 > , W, s(N2) ) 
 	p( S', E', < N3, N4, O' > , W', N5 ) B .
 
-    
+
+    *** Del botellon se decide ir a la cola
     rl [botellon-to-cola] : 
 	[ P B, Q, L ]
       =>
-	[ B, inserta(P, Q ) , L ] .
+	[ B, insertaCola(P, Q ) , L ] .
     
 
-    crl [cola-to-local] : *** TODO!!!!!
+    *** De la cola al local (si puede)
+    crl [cola-to-local-ok] :
 	[ B, Q, L] 
       => 
-	[ B, Q', insertar( P, L )]
-    if 	{ P, Q' } := pop(Q) /\
-	  not completo(L) /\
-	  not empty(Q) .
+	[ B, Q', insertaLocal( P, L )]
+      if  not completo(L) /\
+	  not empty(Q) /\
+	  {P, Q'} := pop(Q) /\
+	  puedePasar(P) .
+
+      
+    *** (puede que no pueda pasar al local)
+    crl [cola-to-local-no]  :
+    	[ B, Q, L ]
+      =>
+	[ P B, Q', L ]
+      if not completo(L) /\
+	  not empty(Q) /\
+	  {P, Q'} := pop(Q) /\
+	  not puedePasar(P) .
+      
+      
+    *** Beber refresco en local
+    rl [refresco-local] :
+	l(N, N1, s(N2), (pSB(S, E, N3) C))
+      =>
+	l(N, N1, N2, (pSB(S, E, s(N3) C)) .
+
+    ***  Beber copa (solo si no lleva 4)
+    crl [copa-local] :
+	l(N, s(N1), s(N2), (pSB(S, E, N3) C))
+      =>
+	l(N, N1, N2, (pSB(S, E, s(N3)) C))
+      if N3 < 4 .
 
     
+    *** Dabi echa a alguien del local
+    crl [echa-local] :
+	l(N, N1, N2, (pSB(S, E, N3) C))
+    =>
+	l(N, N1, N2, C)
+      if N3 == 4 .
 
+    *** La gente se va del local
+    rl [salir-local] :
+	l(N, N1, N2, (pSB(S, E, N3) C)) ***no es dabi
+    =>
+	l(N, N1, N2, C) .
 
 endm
+
+
