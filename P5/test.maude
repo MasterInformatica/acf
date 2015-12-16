@@ -111,16 +111,11 @@ mod TEST is
     eq insertaCola(P, Li | Li' ) = ( Li - P ) | Li' [owise] .
 
 
-
-*** ESTO NO FUNCIONA ***
     sort Pareja .
     op { _ , _ } : Persona Cola -> Pareja [ctor] .
     
     op pop : Cola ~> Pareja .
-    eq pop( (P - Q) | Q' ) = { P , (Q | Q') } .
-    eq pop( cv | (P - Q) ) = { P , (cv | Q) } .
-
-
-
+    eq pop( (P - Li) | Li' ) = { P , (Li | Li') } .
+    eq pop( cv | (P - Li) ) = { P , (lv | Li) } .
 
 endm
