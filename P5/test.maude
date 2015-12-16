@@ -68,11 +68,13 @@ mod TEST is
 
     *** lugares
     sorts Botellon Cola Local .
-    subsort Botellon < Cjto .
+*** TODO: si pongo botellon, la op inicio no funciona.
+***    subsort Botellon < Cjto .
     subsort Persona < Botellon Cola Cjto Lista .
+    
 
     sort Estado .
-    op [_,_,_] : Botellon Cola Local -> Estado [ctor] .
+    op [ _ , _ , _ ] : Cjto Cola Local -> Estado [ctor] .
 
 
 *** local ***
@@ -117,5 +119,40 @@ mod TEST is
     op pop : Cola ~> Pareja .
     eq pop( (P - Li) | Li' ) = { P , (Li | Li') } .
     eq pop( cv | (P - Li) ) = { P , (lv | Li) } .
+
+
+
+**************************
+*** Ejemplos de inicio ***
+**************************
+
+    ops mike peter lucille : -> Persona .
+    eq mike = p("Mike", 23, < 1 , 2 , 3 > , vip, 0 ) .
+    eq peter = p("Peter", 20, < 2 , 2 , 1 > , vip, 0 ) .
+    eq lucille = p("Lucille", 16, < 2 , 1 , 0 > , novip, 0 ) .
+
+    op local : -> Local .
+    eq local = l(5, 6, 5, dabi) .
+    
+    op inicio : -> Estado .
+    eq inicio = [ mike peter lucille, lv | lv , local ] .
+
+
+******************************
+*** Reglas, comportamiento ***
+******************************
+
+    *** Beber Refresco
+    rl [refresco-botellon-propio] :
+	p( S, E, < N, s(N1), s(O) > , W, N2 ) B 
+      => 
+	p( S, E, < N, N1, O > , W, N2 ) B .
+    
+    rl [refresco-botellon-ajeno] :
+	p( S, E, < N, s(N1), 0 > , W, N2 )  
+	p( S', E', < N3, N4, s(O') > , W', N5 ) B 
+      => 
+	p( S, E, < N, N1, 0 > , W, N2 ) 
+	p( S', E', < N3, N4, O' > , W', N5 ) B .
 
 endm
