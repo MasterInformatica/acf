@@ -3,15 +3,27 @@ mod TEST is
     pr STRING .
     pr BOOL .
 
-    vars Q Q' : Cola .
-    vars C C' : Cjto .
+
+
+****************************
+*** Variables Auxiliares ***
+****************************
     vars P P' : Persona .
-    vars S S' : String .
-    vars E N N1 N2 N3 : Nat .
-    vars W W' : Vipedad .
-    vars V V' : Bolsa .
+
+    vars Q Q' : Cola .
     vars Li Li' : Lista .
+    vars C C' : Cjto .
+
     vars L L' : Local .
+
+    vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
+
+    vars B B' : Bolsa . *** Volsa xD
+    vars S S' : String .
+    vars W W' : Vipedad .
+    vars St St' : Estado .
+
+
 ******************************
 *** Estrucutras auxiliares ***
 ******************************
@@ -19,10 +31,10 @@ mod TEST is
     sorts Cjto Lista .
 
     op lv : -> Lista [ctor] .
-    op _-_ : Persona Lista -> Lista [ctor assoc id: lv ] .
+    op _-_ : Lista Lista -> Lista [ctor assoc id: lv ] .
 
     op cv : -> Cjto [ctor] .
-    op __ : Persona Cjto -> Cjto [ctor assoc comm id: cv ] .
+    op __ : Cjto Cjto -> Cjto [ctor assoc comm id: cv ] .
 
     op len : Cjto -> Nat .
     eq len( cv ) = 0 .
@@ -53,24 +65,23 @@ mod TEST is
     eq dabi = manager( "Dabi", 23, 0 ) .
 
     op pTopSB : Persona -> Persona .
-    eq pTopSB( p(S, E, V, W, N) ) = pSB(S, E, N) .
+    eq pTopSB( p(S, E, B, W, N) ) = pSB(S, E, N) .
     eq pTopSB( P ) = P [owise] .
     
     op edad : Persona -> Nat .
-    eq edad( p(S, E, V, W, N )) = E .
+    eq edad( p(S, E, B, W, N )) = E .
     eq edad( manager(S, E, N)) = E .
     eq edad( pSB(S, E, N)) = E .
     
     op isVip : Persona -> Bool .
-    eq isVip( p(S, E, V, vip, N ) ) = true .
+    eq isVip( p(S, E, B , vip, N ) ) = true .
     eq isVip( P ) = false [owise] .
 
 
     *** lugares
-    sorts Botellon Cola Local .
-*** TODO: si pongo botellon, la op inicio no funciona.
-***    subsort Botellon < Cjto .
-    subsort Persona < Botellon Cola Cjto Lista .
+    sorts Cola Local .
+    subsort Persona < Cjto .
+    subsort Persona < Lista .
     
 
     sort Estado .
@@ -93,7 +104,7 @@ mod TEST is
 
 
     op puedePasar : Persona -> Bool .
-    ceq puedePasar( p(S, E, V, W, N) ) = true 
+    ceq puedePasar( p(S, E, B, W, N) ) = true 
       if E > 17 /\
 	  N < 3 .
     eq puedePasar( P ) = false [owise] .
@@ -118,7 +129,7 @@ mod TEST is
     
     op pop : Cola ~> Pareja .
     eq pop( (P - Li) | Li' ) = { P , (Li | Li') } .
-    eq pop( cv | (P - Li) ) = { P , (lv | Li) } .
+    eq pop( lv | (P - Li) ) = { P , (lv | Li) } .
 
 
 
@@ -126,33 +137,115 @@ mod TEST is
 *** Ejemplos de inicio ***
 **************************
 
-    ops mike peter lucille : -> Persona .
-    eq mike = p("Mike", 23, < 1 , 2 , 3 > , vip, 0 ) .
-    eq peter = p("Peter", 20, < 2 , 2 , 1 > , vip, 0 ) .
+    ops mike peter lucille lukas juan fiona : -> Persona .
+    eq mike = p("Mike", 23, < 2 , 2 , 3 > , vip, 0 ) .
+    eq peter = p("Peter", 20, < 1 , 2 , 1 > , vip, 0 ) .
     eq lucille = p("Lucille", 16, < 2 , 1 , 0 > , novip, 0 ) .
+
+    eq lukas = p("Lukas", 24, < 0, 0, 0 > , vip, 0 ) . 
+    eq juan = p("Juan", 18, < 0, 0, 0 > , novip, 0 ) .
+    eq fiona = p( "Fiona", 12, < 0, 0, 0 > , vip, 0 ) .
+
+
 
     op local : -> Local .
     eq local = l(5, 6, 5, dabi) .
     
     op inicio : -> Estado .
-    eq inicio = [ mike peter lucille, lv | lv , local ] .
+    eq inicio = [ mike peter lucille lukas juan fiona, lv | lv , local ] .
 
+    op inicio2 : -> Estado .
+    eq inicio2 = [ cv, lv | lucille, local ] .
+
+    ops inicioMike inicioPeter : -> Estado .
+    eq inicioMike = [ mike, lv | lv, local ] .
+    eq inicioPeter = [ peter, lv | lv, local ] .
 
 ******************************
 *** Reglas, comportamiento ***
 ******************************
 
-    *** Beber Refresco
+    ****************
+    *** Botellon *** 
+    ****************
+    
+*** Beber Refresco
     rl [refresco-botellon-propio] :
-	p( S, E, < N, s(N1), s(O) > , W, N2 ) B 
+	[ p( S, E, < N, s(N1), s(O) > , W, N2 ) C , Q , L ]
       => 
-	p( S, E, < N, N1, O > , W, N2 ) B .
+	[ p( S, E, < N, N1, O > , W, N2 ) C , Q , L ] .
     
     rl [refresco-botellon-ajeno] :
-	p( S, E, < N, s(N1), 0 > , W, N2 )  
-	p( S', E', < N3, N4, s(O') > , W', N5 ) B 
+	[ p( S, E, < N, s(N1), 0 > , W, N2 ) 
+	p( S', E', < N3, N4, s(O') > , W', N5 ) C , Q , L ]
       => 
-	p( S, E, < N, N1, 0 > , W, N2 ) 
-	p( S', E', < N3, N4, O' > , W', N5 ) B .
+	[ p( S, E, < N, N1, 0 > , W, N2 ) 
+	p( S', E', < N3, N4, O' > , W', N5 ) C , Q , L ] .
 
+*** Beber Cubata
+    rl [cubata-botellon-propio] :
+	[ p( S, E, < s(N), s(N1), s(O) > , W, N2 ) C, Q, L ]
+      => 
+	[ p( S, E, < N, N1, O > , W, s(N2) ) C, Q, L ] .
+    
+    rl [cubata-botellon-ajeno] :
+	[ p( S, E, < s(N), s(N1), 0 > , W, N2 ) 
+	p( S', E', < N3, N4, s(O') > , W', N5 ) C, Q, L ]
+      => 
+	[ p( S, E, < N, N1, 0 > , W, s(N2) ) 
+	p( S', E', < N3, N4, O' > , W', N5 ) C, Q, L ] .
+
+*** Del botellon se decide ir a la cola
+    rl [botellon-to-cola] : 
+	[ P C, Q, L ]
+      =>
+	[ C, insertaCola(P, Q ) , L ] .    
+
+*** De la cola al local (si puede)
+    crl [cola-to-local-ok] :
+	[ C, Q, L] 
+      => 
+	[ C, Q', insertaLocal( P, L )]
+      if  not completo(L) /\
+	  not empty(Q) /\
+	  {P, Q'} := pop(Q) /\
+	  puedePasar(P) .
+
+***(puede que no pueda pasar al local)
+    crl [cola-to-local-no]  :
+     	[ C, Q, L ]
+      =>
+	[ P C, Q', L ]
+      if not completo(L) /\
+	  not empty(Q) /\
+	  {P, Q'} := pop(Q) /\
+	  not puedePasar(P) .
+
+
+*** (Beber refresco en local
+    rl [refresco-local] :
+	l( N, N1, s(N2), pSB( S, E, N3 ) C )
+      =>
+	l( N, N1, N2, pSB( S, E, N3 ) C ) .)
+
+***  Beber copa (solo si no lleva 4)
+    crl [copa-local] :
+	l(N, s(N1), s(N2), (pSB(S, E, N3) C))
+      =>
+	l(N, N1, N2, (pSB(S, E, s(N3)) C))
+      if N3 < 4 .
+
+*** Dabi echa a alguien del local
+    crl [echa-local] :
+	l(N, N1, N2, (pSB(S, E, N3) C))
+    =>
+	l(N, N1, N2, C)
+      if N3 == 4 .
+
+
+*** La gente se va del local
+    rl [salir-local] :
+	l(N, N1, N2, (pSB(S, E, N3) C)) ***no es dabi
+    =>
+	l(N, N1, N2, C) .
 endm
