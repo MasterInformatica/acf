@@ -1,7 +1,7 @@
-mod TEST is
+mod FIESTA is
     pr NAT .
     pr STRING .
-    pr BOOL .
+    pr EXT-BOOL .
 
 
 
@@ -33,8 +33,20 @@ mod TEST is
     op lv : -> Lista [ctor] .
     op _-_ : Lista Lista -> Lista [ctor assoc id: lv ] .
 
+    *** Comprueba si una persona (dada por su nombre) está en la lista
+    op isInLista : Lista String -> Bool .
+    eq isInLista(lv, S) = false .
+    eq isInLista( P - Li, S) = nombre(P) == S or-else isInLista(Li, S) .
+
+
     op cv : -> Cjto [ctor] .
     op __ : Cjto Cjto -> Cjto [ctor assoc comm id: cv ] .
+
+
+    op isInCjto : Cjto String -> Bool .
+    eq isInCjto( P C , S) = nombre(P) == S or-else isInCjto(C, S) .
+    eq isInCjto( cv, S) = false .
+
 
     op len : Cjto -> Nat .
     eq len( cv ) = 0 .
@@ -67,12 +79,37 @@ mod TEST is
     op pTopSB : Persona -> Persona .
     eq pTopSB( p(S, E, B, W, N) ) = pSB(S, E, N) .
     eq pTopSB( P ) = P [owise] .
-    
+
+    op nombre : Persona -> String .
+    eq nombre( p(S, E, B, W, N )) = S .
+    eq nombre( manager(S, E, N)) = S .
+    eq nombre( pSB(S, E, N)) = S .
+
     op edad : Persona -> Nat .
     eq edad( p(S, E, B, W, N )) = E .
     eq edad( manager(S, E, N)) = E .
     eq edad( pSB(S, E, N)) = E .
-    
+
+    op alcohol : Persona -> Nat .
+    eq alcohol( p(S, E, < N, N2, N1 >, W, N3 )) = N .
+    eq alcohol( manager(S, E, N)) = 0 .
+    eq alcohol( pSB(S, E, N)) = 0 .
+
+    op refrescos : Persona -> Nat .
+    eq refrescos( p(S, E, < N1, N, N2 >, W, N3 )) = N .
+    eq refrescos( manager(S, E, N)) = 0 .
+    eq refrescos( pSB(S, E, N)) = 0 .
+
+    op hielo : Persona -> Nat .
+    eq hielo( p(S, E, < N1, N2, N >, W, N3 )) = N .
+    eq hielo( manager(S, E, N)) = 0 .
+    eq hielo( pSB(S, E, N)) = 0 .
+        
+    op copas : Persona -> Nat .
+    eq copas( p(S, E, B, W, N )) = N .
+    eq copas( manager(S, E, N)) = 0 .
+    eq copas( pSB(S, E, N)) = N .
+
     op isVip : Persona -> Bool .
     eq isVip( p(S, E, B , vip, N ) ) = true .
     eq isVip( P ) = false [owise] .
@@ -131,7 +168,10 @@ mod TEST is
     eq pop( (P - Li) | Li' ) = { P , (Li | Li') } .
     eq pop( lv | (P - Li) ) = { P , (lv | Li) } .
 
-
+    *** Dado el nombre de una persona, comprueba si esta está en la cola
+    op isInCola : Cola String -> Bool .
+    eq isInCola( Li | Li' , S) = 
+	isInLista(Li , S) or-else isInLista(Li' , S) .
 
 **************************
 *** Ejemplos de inicio ***
@@ -249,3 +289,140 @@ mod TEST is
     =>
 	l(N, N1, N2, C) .
 endm
+
+load model-checker.maude
+
+mod PROPS is
+    pr SATISFACTION .
+    pr FIESTA .
+
+    subsort Estado < State .
+
+    vars P P' : Persona .
+
+    vars Q Q' : Cola .
+    vars Li Li' : Lista .
+    vars C C' : Cjto .
+
+    vars L L' : Local .
+
+    vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
+
+    vars B B' : Bolsa . *** Volsa xD
+    vars S S' : String .
+    vars W W' : Vipedad .
+    vars St St' : Estado .
+
+
+
+    *** Se ha acabado el alcohol en el local
+    op noAlcoholLocal : -> Prop .
+    eq [ C, Q, l(N, 0, N1, C') ] |= noAlcoholLocal 
+      = true .
+
+    *** Se han acabado los refrescos en el local
+    op noRefrescosLocal : -> Prop .
+    eq [ C', Q, l(N, N1, 0, C) ] |= noRefrescosLocal 
+      = true .
+
+    *** Alguien con nombre está en la cola
+    op estaEnCola : String -> Prop .
+    eq [ C', Q , L ] |= estaEnCola(S) 
+      = isInCola(Q, S) .
+
+    *** Alguien con nombre está en el local
+    op estaEnLocal : String -> Prop .
+    eq [ C', Q, l(N, N1, N2, C ) ] |= estaEnLocal(S)
+      = isInCjto(C, S) .
+
+    *** Hay menos de N personas en el local
+    op hayMenosPersonasLocal : Nat -> Prop .
+    eq [ C', Q, l(N3, N1, N2, C ) ] |= hayMenosPersonasLocal(N)
+      = len(C) <= N .
+    
+    *** Una persona ha bebido demasiado.
+    op bebidoDemasiado : -> Prop .
+    eq [ C', Li | Li' , l(N, N1, N2,  C ) ]  |= bebidoDemasiado
+      =         bebidoMasDe( C   , 3 ) 
+	or-else bebidoMasDe( C'  , 4 ) 
+	or-else bebidoMasDe( Li  , 4 ) 
+	or-else bebidoMasDe( Li' , 4 ) . 
+
+    op bebidoMasDe : Cjto Nat -> Bool .
+    eq bebidoMasDe( cv , N ) = false .
+    eq bebidoMasDe( P C , N ) = copas(P) >= N or-else bebidoMasDe(C , N) .
+
+    op bebidoMasDe : Lista Nat -> Bool .
+    eq bebidoMasDe( cv , N ) = false .
+    eq bebidoMasDe( P - Li , N ) = copas(P) >= N or-else bebidoMasDe(Li , N) .
+
+    *** hay hielo en la zona de botellon
+    op hayHieloBotellon : -> Prop .
+    eq [ C', Q, L ] |= hayHieloBotellon 
+      = numHielo(C') > 0 .
+
+    op numHielo : Cjto -> Nat .
+    eq numHielo( cv ) = 0 .
+    eq numHielo( P C ) = hielo(P) + numHielo(C) .
+
+
+    *** hay refresco en la zona de botellon
+    op hayRefrescoBotellon : -> Prop .
+    eq [ C, Q, L ] |= hayRefrescoBotellon 
+      = numRefresco(C) > 0 .
+
+    op numRefresco : Cjto -> Nat .
+    eq numRefresco( cv ) = 0 .
+    eq numRefresco( P C ) = refrescos(P) + numRefresco(C) .
+
+
+    *** hay alcohol en la zona de botellon
+    op hayAlcoholBotellon : -> Prop .
+    eq [ C', Q, L ] |= hayAlcoholBotellon 
+      = numAlcohol(C') > 0 .
+
+    op numAlcohol : Cjto -> Nat .
+    eq numAlcohol( cv ) = 0 .
+    eq numAlcohol( P C ) = alcohol(P) + numAlcohol(C) .
+    
+endm
+
+mod CHECK is
+pr PROPS .
+pr MODEL-CHECKER .
+pr LTL-SIMPLIFIER .
+
+endm
+
+
+*******************
+*** Ejercicio 4 ***
+*******************
+
+*** Dabi siempre está en el local
+red modelCheck(inicio2, [] estaEnLocal("Dabi")) .
+
+*** Si el aforo no se supera al principio, nunca se supera.
+red modelCheck(inicio2, hayMenosPersonasLocal(5) -> [] hayMenosPersonasLocal(5)) .
+
+*** Si alguien está en la cola acaba entrando.
+red modelCheck(inicio, [] ( estaEnCola("Lucille") -> <> estaEnLocal("Lucille"))) .
+
+*** El alcohol nunca se acaba.
+red modelCheck(inicio, [] hayAlcoholBotellon ) .
+
+*** Los refrescos siempre se acaban.
+red modelCheck(inicio, <> ~ hayRefrescoBotellon ) .
+*** En algún momento alguien bebe de más, y permanece en ese estado
+*** para siempre.
+
+*** Si hay hielo, refrescos y alcohol en la zona de botellón, entonces
+*** en algún momento alguien bebe de más.
+
+eof
+
+    *** local( Aforo, Alcohol, Refresco, Personas )
+    op l : Nat Nat Nat Cjto -> Local [ctor] .
+
+
+
