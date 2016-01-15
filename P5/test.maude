@@ -18,7 +18,7 @@ mod FIESTA is
 
     vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
 
-    vars B B' : Bolsa . *** Volsa xD
+    vars B B' : Bolsa 
     vars S S' : String .
     vars W W' : Vipedad .
     vars St St' : Estado .
@@ -394,35 +394,40 @@ pr LTL-SIMPLIFIER .
 
 endm
 
+eof
 
 *******************
 *** Ejercicio 4 ***
 *******************
 
 *** Dabi siempre está en el local
+***( Siempre es cierta, ya que no hay ninguna regla que saque a Dabi del local )
 red modelCheck(inicio2, [] estaEnLocal("Dabi")) .
 
 *** Si el aforo no se supera al principio, nunca se supera.
-red modelCheck(inicio2, hayMenosPersonasLocal(5) -> [] hayMenosPersonasLocal(5)) .
+***( Siempre es cierta. La regla no permite introducir a nadie en el local si el aforo está completo)
+red modelCheck(inicio2, hayMenosPersonasLocal(6) -> [] hayMenosPersonasLocal(6)) .
 
 *** Si alguien está en la cola acaba entrando.
+***( Falso. Si hay una menor en la fiesta, esta nunca entra en el local)
 red modelCheck(inicio, [] ( estaEnCola("Lucille") -> <> estaEnLocal("Lucille"))) .
 
 *** El alcohol nunca se acaba.
-red modelCheck(inicio, [] hayAlcoholBotellon ) .
+***( La ejecucion da cierta para este estado en concreto, ya que hay una menor que tiene más alcohol que refrescos, por lo que el el alcohol nunca se va a cabar. Y además, al ser menor no se va de la fiesta. Sin embargo, esta regla podría ser falsa en otros estados de inicio (por ejemplo, eliminando a la menor de la fiesta) )
+red modelCheck(inicio, [] (hayAlcoholBotellon \/ ~ noAlcoholLocal) ) .
 
 *** Los refrescos siempre se acaban.
-red modelCheck(inicio, <> ~ hayRefrescoBotellon ) .
-*** En algún momento alguien bebe de más, y permanece en ese estado
+***( Falso. La gente se puede ir del local sin haber gastado todos los refrescos del mismo)
+red modelCheck(inicio, <> (~ hayRefrescoBotellon /\ noRefrescosLocal )) .
+
+*** Si en algún momento alguien bebe de más, y permanece en ese estado
 *** para siempre.
+***( Falso. Una persona que haya bebido demasiado del local, es echado )
+red modelCheck(inicio, [] ( <> bebidoDemasiado -> [] bebidoDemasiado)) .
 
 *** Si hay hielo, refrescos y alcohol en la zona de botellón, entonces
-*** en algún momento alguien bebe de más.
+*** en algún momento alguien bebe de más. 
+***( Falso. Que haya suficiente bebida en la zona de botellón no implica que la gente beba )
+red modelCheck(inicio, [] ( <> (hayAlcoholBotellon /\ hayRefrescoBotellon /\ hayHieloBotellon) -> <> bebidoDemasiado ) ) .
 
 eof
-
-    *** local( Aforo, Alcohol, Refresco, Personas )
-    op l : Nat Nat Nat Cjto -> Local [ctor] .
-
-
-
