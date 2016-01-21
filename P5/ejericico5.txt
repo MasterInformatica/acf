@@ -1,0 +1,89 @@
+Hay reglas que no pueden sustituirse por una ecuación independientemente de
+la propiedad que estemos considerando. Los motivos que impiden la
+transformación junto con las reglas son (una regla que no se pueda
+transformar por varios motivos, solo se muestra en uno de los casos):
+
+a) Reglas no terminantes: 
+
+  - [botellon-to-cola], [cola-to-local-no] : En el caso de una menor, haría
+    que estas reglas no fueran terminantes. También ocurriría lo mismo con
+    una persona que ha bebido demasiado.
+
+
+b) Reglas no confluentes:
+   
+  - [refresco-botellon-propio], [cubata-botellon-propio] : Desde el mismo
+    estado puede decidir consumir un refreso, o acompañarlo de alcohol,
+    produciendo dos estados finales distintos.
+
+  - [refresco-botellon-ajeno], [cubata-botellon-ajeno] : Desde el mismo
+    estado puede decidir consumir un refreso, o acompañarlo de alcohol,
+    produciendo dos estados finales distintos.
+
+  - [refresco-local], [copa-local]: Desde un mismo estado, una persona
+    puede decidir beber un refresco o un cubata, produciendo diferentes
+    estados finales.
+
+
+c) Reglas no coherentes:
+
+   - [salir-local]: Si se transforma esta regla en ecuación, al ejecutarse
+     ya no sería posible aplicar las reglas de beber dentro del local.
+
+   - [echa-local]: Si se transforma esta regla en ecuación, al ejecutarse
+     no podría aplicarse la regla de beber refrescos dentro del local.
+
+
+d) Reglas no invisibles
+La única regla que se podría transformar en ecuación sería la regla
+[cola-to-local-ok]. Para que se pueda transformar, tendría que ser
+invisible respecto a las propiedades. A continaución se muestran las
+propiedades en las que no se podría transformar esta regla en ecuación:
+
+Comentar las propiedades: P3, P4, P5
+
+
+----------------------------------------------------------------------
+P1) Se ha acabado el alcohol en el local:
+
+ - [copa-local] : Esta regla podría hacer que en un local que quede una
+   unidad de alcohol la propiedad sea falsa, pero después de alicar la
+   ecuación sería cierta en el nuevo estado.
+
+P2) Se han acabado los refrescos en el local:
+
+ - [copa-local], [refresco-local]: Un estado en el que quede una única
+   unidad de refresco en el local, haría que la propiedad fuera falsa antes
+   de aplicar la regla, pero verdadera después.
+
+P3) Alguien (con nombre) está en la cola:
+
+ - [cola-to-local-no], 
+
+
+
+
+Nota:
+
+1) Terminantes, i.e.
+
+   a => b .
+   b => a .
+
+2) Confluentes
+   a => b .
+   a => c .
+
+3) Invisibles, i.e.,
+   
+   Si la propiedad es cierta antes y después de la regla, lo tiene que ser
+   antes y después de la ecuación.
+
+   Si la propiedad es falsa antes y después de la regla, lo tiene que ser
+   antes y después de la ecuación.   
+
+
+4) Coherentes, i.e., 
+
+   No se pueden perder oportunidades de reescritura al aplicar una ecuación
+   en lugar de una regla.
