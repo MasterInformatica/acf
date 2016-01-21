@@ -1,0 +1,182 @@
+\documentclass[10pt]{beamer}
+
+\usetheme{m}
+
+\usepackage{times}
+\usepackage{tikz}
+\usepackage{amsmath}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+%\usepackage{pgfplots}
+%\usepgfplotslibrary{dateplot}
+
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{listings}
+\usepackage{pgfplots}
+
+
+\title{Pago electrónico}
+\subtitle{}
+\date{}
+\author{Jesús Javier Doménech Arellano}
+\institute{25 Enero 2016}
+
+%\titlegraphic{\hfill\includegraphics[scale=0.29]{images/logo.png}}
+
+\definecolor{bgg}{HTML}{FBFBFB}
+\def\gcolor{bgg}    % while presenting
+%\def\gcolor{black} % while developing
+
+\def\tikzpicdim{
+  \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
+  \draw[step=1cm, color=\gcolor] (0,0) grid (12,7);
+}
+
+\let\tikzpicdimlarge\tikzpicdim
+
+\def\myurl{\hfil\penalty 100 \hfilneg \hbox}
+
+\metroset{titleformat=regular}
+\metroset{inner/sectiontitleformat=regular}
+\metroset{outer/frametitleformat=regular}
+\metroset{block=fill}
+
+
+\newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
+
+%== Estilos propios de lstlisting
+\lstset{%
+  %backgroundcolor=\color{yellow!20},%
+    basicstyle=\scriptsize\ttfamily,% breaklines=true,
+    numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt,%
+    frame=single%
+    }%
+
+% Add your keywords here, and have this in a separate file
+% and include it in your preamble
+%\lstset{emph={%  
+%    procedure, end, to, do, pragma, omp, parallel, for, private%
+%    },emphstyle={\color{black}\bfseries\underline}%
+%}%
+
+
+
+\begin{document}
+
+
+
+\maketitle
+
+\begin{frame}
+\frametitle{A tener en cuenta}
+\begin{itemize}
+\item Versatilidad y continua evolución
+\item Solo se comentan algunos de los sistemas actualmente existentes.
+\item Algunos de los sistemas de pago es resultado de la combinación de varios de ellos.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Definición}
+El uso de Internet y las redes de comunicaciones han facilitado la
+creación de un nuevo comercio llamado \textbf{comercio electrónico}. Este se
+basa en la prestación de servicios (venta, disposición de efectivo,
+... ) ligados a una transacción financiera de forma electrónica.
+
+Esta transacción significa un movimiento real de fondos entre el
+usuario y el prestador del servicio, lo que ha supuesto la creación de
+sistemas de pago seguros y eficaces. A estos sistemas de pago es lo
+que llamamos \textbf{sistemas de pago electrónico}.
+
+Un sistema de pago electrónico debe cumplir tres requisitos mínimos: 
+\begin{itemize}
+\item Privacidad a dicha comunicación evitando las escuchas de terceros.
+\item Autentificación del usuario e integridad del mensaje. 
+\item Protección que garantice al usuario que ha pagado por un servicio.
+\end{itemize}
+\end{frame}
+\sectionDark{Régimen jurídico y protocolos}
+
+\begin{frame}
+\frametitle{Normativa legal}
+\begin{itemize}
+\item 97/489/CE de la Comisión, de 30 de julio de
+  1997\footnote{Recomendación de la \emph{CEE}}.
+\item Ley 7/1996, de 15 enero. Regulación del pago con tarjeta.
+\item REAL DECRETO LEGISLATIVO 1/2007, de 16 de noviembre. Defensa del
+  consumidor mediante pagos electrónicos.
+\item Ley 16/2009, de 13 de noviembre. Regulación de algunos sistema
+  de pago online.
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Estándares ISO}
+La función principal de la ISO es buscar la estandarización de normas de productos y seguridad para las empresas u organizaciones a nivel internacional.
+\begin{itemize}
+\item ISO 7816, EMV y GSM. Para promocionar la interoperabilidad entre las tarjetas inteligentes con contacto y los lectores.
+\item ISO/IEC 14443, ISO 15693. El uso de las tarjetas inteligentes sin contacto.
+\item ISO 8583, Estándar para Transacciones Financieras con Mensajes originados en una tarjeta.
+\item ISO 20027 La normativa Europay Mastercard Visa (EMV) es un acuerdo realizado en Europa y permite que los pagos tengan un estándar específico con estas dos tarjetas de crédito.
+\item ISO 20022 para los pagos masivos en euros
+\item ISO 9001 para sus principales procesos de negocio
+\item ISO 27001 seguridad de la información.
+\end{itemize}
+\end{frame}
+\sectionDark{Métodos de pago Electrónico}
+\begin{frame}
+\frametitle{Cajeros}
+\begin{itemize}
+\item \emph{Electrónicos}:
+\item \emph{Automáticos}:
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Cheques y órdenes de pago electrónicas}
+\end{frame}
+\begin{frame}
+\frametitle{Tarjetas de crédito/débito}
+\end{frame}
+\begin{frame}
+\frametitle{Dinero electrónico}
+\end{frame}
+
+\begin{frame}
+\frametitle{Sistemas de pago en internet}
+\begin{itemize}
+\item PayPal
+\item Servicios de pago electrónico a empresas. Pago exprés
+\item Servicios de pago electrónico a empresas. Pago estándar
+\item E-gold
+\item MoneyBookers
+\item Hoopay
+\item StormPay
+\item Divisa digital
+\end{itemize}
+\end{frame}
+\begin{frame}
+\frametitle{Bitcoint (profundizar en cómo se usa, posible demo)}
+\end{frame}
+\begin{frame}
+\frametitle{El pago mediante móvil}
+\begin{itemize}
+\item El pago mediante el móvil basado en tarjetas prepago
+\item Con cargo indirecto a una tarjeta de crédito
+\end{itemize}
+\end{frame}
+
+
+%======= BIBLIOGRAFÍA =======
+\begin{frame}
+  \frametitle{Bibliografía}
+  
+  \begin{enumerate}
+  \item \textbf{Wikipedia:}\\\url{https://en.wikipedia.org/}
+  \end{enumerate}
+\end{frame}
+
+\end{document}
