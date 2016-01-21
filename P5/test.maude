@@ -18,7 +18,7 @@ mod FIESTA is
 
     vars N N1 N2 N3 N4 N5 O O' E E' : Nat .
 
-    vars B B' : Bolsa 
+    vars B B' : Bolsa .
     vars S S' : String .
     vars W W' : Vipedad .
     vars St St' : Estado .
@@ -251,7 +251,7 @@ mod FIESTA is
 	  {P, Q'} := pop(Q) /\
 	  puedePasar(P) .
 
-***(puede que no pueda pasar al local)
+*** (puede que no pueda pasar al local)
     crl [cola-to-local-no]  :
      	[ C, Q, L ]
       =>
@@ -431,3 +431,4 @@ red modelCheck(inicio, [] ( <> bebidoDemasiado -> [] bebidoDemasiado)) .
 red modelCheck(inicio, [] ( <> (hayAlcoholBotellon /\ hayRefrescoBotellon /\ hayHieloBotellon) -> <> bebidoDemasiado ) ) .
 
 eof
+
