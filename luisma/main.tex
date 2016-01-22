@@ -1,0 +1,109 @@
+\documentclass[10pt]{beamer}
+
+\usetheme{m}
+
+\usepackage{times}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usepackage{siunitx}
+
+\usepackage{amsmath}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+%\usepackage{pgfplots}
+%\usepgfplotslibrary{dateplot}
+
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{listings}
+\usepackage{pgfplots}
+
+
+\title{Lógica Epistémica}
+\subtitle{}
+\date{25 de enero de 2016}
+\author{Luis María Costero Valero}
+\institute{ACF - UCM}
+
+%\titlegraphic{\hfill\includegraphics[scale=0.29]{images/logo.png}}
+
+\definecolor{bgg}{HTML}{FBFBFB}
+%\def\gcolor{bgg}    % while presenting
+\def\gcolor{black} % while developing
+
+\def\tikzpicdim{
+  \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
+  \draw[step=1cm, color=\gcolor] (0,0) grid (12,7);
+}
+
+\let\tikzpicdimlarge\tikzpicdim
+
+\def\myurl{\hfil\penalty 100 \hfilneg \hbox}
+
+\metroset{titleformat=regular}
+\metroset{inner/sectiontitleformat=regular}
+\metroset{outer/frametitleformat=regular}
+\metroset{block=fill}
+
+
+\newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
+\newcommand\sectionDarkSpecial[1]{{\metroset{background=dark} \section*{#1} }}
+
+\begin{document}
+
+
+
+\maketitle
+
+\sectionDarkSpecial{Ejemplo}
+\begin{frame}
+  \frametitle{Ejemplo}
+  
+  \begin{columns}
+    \begin{column}{0.55\textwidth}
+      \onslide<1->{Suponemos que existen \alert{tres cartas} (1, 2 y 3):\\
+        -- Alicia tiene una carta en la mano.\\
+        -- Otra bocabajo en la mesa.\\
+        -- La última se devuelve al montón.\\
+      }
+      \vspace{0.5cm}
+      \only<1,2>{\textbf{¿Cuáles son los estados relevantes?}}
+      \only<3,4,5>{\textbf{¿Qué información tiene Alicia?}}
+    \end{column}
+    \begin{column}{0.55\textwidth}
+      \begin{tikzpicture}[scale=1.25, transform shape]
+        \visible<2->{
+          \tikzstyle{every node} = [circle, fill=gray!30, draw=gray!90] 
+          \node [label=below left:\scriptsize$w1$] (w1) at (0.0, 4.0) {$\{1,2\}$};
+          \node [label=below right:\scriptsize$w4$] (w4) at (1.7, 4.0) {$\{2,1\}$};
+          \node [label=below left:\scriptsize$w2$] (w2) at (0.0, 2.0) {$\{1,3\}$};
+          \node [label=below right:\scriptsize$w5$] (w5) at (1.7, 2.0) {$\{3,1\}$};
+          \node [label=below left:\scriptsize$w3$] (w3) at (0.0, 0.0) {$\{2,3\}$};
+          \node [label=below right:\scriptsize$w6$] (w6) at (1.7, 0.0) {$\{3,2\}$};
+          \visible<4->{
+            \draw [line width = 0.25mm, <->] (w1) -- (w2);
+            \draw [line width = 0.25mm, <->] (w3) -- (w4);
+            \draw [line width = 0.25mm, <->] (w5) -- (w6);
+          }
+          \visible<5->{
+            \path [->] (w1) edge[loop left] ();
+            \path [->] (w2) edge[loop left] ();
+            \path [->] (w3) edge[loop left] ();
+            \path [->] (w4) edge[loop right] ();
+            \path [->] (w5) edge[loop right] ();
+            \path [->] (w6) edge[loop right] ();
+          }
+        }
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+
+\end{document}
