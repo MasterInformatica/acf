@@ -40,50 +40,31 @@ La única regla que se podría transformar en ecuación sería la regla
 invisible respecto a las propiedades. A continaución se muestran las
 propiedades en las que no se podría transformar esta regla en ecuación:
 
-Comentar las propiedades: P3, P4, P5
+Sólo hay problemas para las propiedades: P3, P4 y P5
 
-
-----------------------------------------------------------------------
 P1) Se ha acabado el alcohol en el local:
-
- - [copa-local] : Esta regla podría hacer que en un local que quede una
-   unidad de alcohol la propiedad sea falsa, pero después de alicar la
-   ecuación sería cierta en el nuevo estado.
+Entrar en el local no modifica el número de alcohol en el local.
 
 P2) Se han acabado los refrescos en el local:
-
- - [copa-local], [refresco-local]: Un estado en el que quede una única
-   unidad de refresco en el local, haría que la propiedad fuera falsa antes
-   de aplicar la regla, pero verdadera después.
+Entrar en el local no modifica el número de refrescos en el local.
 
 P3) Alguien (con nombre) está en la cola:
+[cola-to-local-ok] convierte esta propiedad de cierta a falsa para cierto nombre.
 
- - [cola-to-local-no], 
+P4) Alguien (con nombre) está en el local:
+[cola-to-local-ok] convierte esta propiedad de falsa a cierta para cierto nombre.
 
+P5) Si el número de personas en el interior del local es menor de un cierto número dado como argumento:
+Entrar en el local modifica el número de personas que están dentro por tanto si el número de la propiedad es menor que el aforo, podría superarse.
 
+P6) Si una persona ha bebido demasiado:
+Entrar en el local no te hace beber y además no te dejan entrar bebido.
 
+P7) Si queda hielo en la zona de botellón:
+No se modificia el hielo en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
 
-Nota:
+P8) Si quedan refrescos en la zona de botellón:
+No se modifician los refrescos en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
 
-1) Terminantes, i.e.
-
-   a => b .
-   b => a .
-
-2) Confluentes
-   a => b .
-   a => c .
-
-3) Invisibles, i.e.,
-   
-   Si la propiedad es cierta antes y después de la regla, lo tiene que ser
-   antes y después de la ecuación.
-
-   Si la propiedad es falsa antes y después de la regla, lo tiene que ser
-   antes y después de la ecuación.   
-
-
-4) Coherentes, i.e., 
-
-   No se pueden perder oportunidades de reescritura al aplicar una ecuación
-   en lugar de una regla.
+P9) Si queda alcohol en la zona de botellón:
+No se modificia el alcohol en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
