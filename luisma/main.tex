@@ -1,64 +1,59 @@
-\documentclass[10pt]{beamer}
+\begin{frame}
+  \frametitle{Lógicas modales}
+  \begin{center} $ p \equiv "$Hoy hace frío$"$ \end{center}
+  \visible<2->{
+    \begin{itemize}
+    \item ¿Hace realmente frío?
+    \item ¿Es sabido que hoy hace frío?
+    \item ¿Hace frío ahora, o dentro de un rato?
+    \item Si vuelo a Dublín, ¿seguirá haciendo frío?
+    \end{itemize}
+  }
+\end{frame}
 
-\usetheme{m}
+%===================================
+\sectionDark{Lógica epistémica} %===
+%===================================
+\begin{frame}
+  \frametitle{Lógica epistémica (1 agente)}
+  \vspace{0.8cm}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      Lógica preposicional:
+      \begin{itemize}
+      \item $p, q, \cdots \in \mathcal{P}$
+      \item $\varphi,\quad \neg\varphi,\quad \varphi\mor\psi,\quad \varphi\mand\psi$
+      \item $\varphi \rightarrow \psi $ ( $\myeq \neg\varphi \mor \psi$ )
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \visible<2->{
+        Lógica epistémica:
+        \begin{itemize}
+        \item $\K\,\varphi$\hspace{2.5cm}
+        \item $\M\,\varphi \myeq \neg\K\neg\varphi$\hspace{0.9cm}
+        \end{itemize}
+      }
+    \end{column}
+  \end{columns}
+  \vspace{1cm}
+  \visible<3->{
+    Algunos ejemplos:
+    \begin{align*}
+      \K(\varphi \rightarrow \psi): & $\hspace{0.3cm} "Se sabe que $\varphi$ implica $\psi$"$\\
+      \K \varphi \mor \K \neg \varphi: & $\hspace{0.3cm} "Se sabe que
+                                         $\varphi$ o $\neg\varphi$"$\\
+      \K \varphi \mor \neg \K \varphi:  &$\hspace{0.3cm} "Puede que se sepa
+                                          o no que $\varphi$"$\\
+    \end{align*}
+  }
 
-\usepackage{times}
-\usepackage{tikz}
-\usetikzlibrary{arrows,shapes}
-\usepackage{siunitx}
-
-\usepackage{amsmath}
-\usepackage{fancyvrb}
-\usepackage{xspace}
-
-\usepackage{booktabs}
-\usepackage[scale=2]{ccicons}
-
-%\usepackage{pgfplots}
-%\usepgfplotslibrary{dateplot}
-
-\usepackage[latin1]{inputenc}
-\usepackage[spanish]{babel}
-
-\usepackage{listings}
-\usepackage{pgfplots}
-
-
-\title{Lógica Epistémica}
-\subtitle{}
-\date{25 de enero de 2016}
-\author{Luis María Costero Valero}
-\institute{ACF - UCM}
-
-%\titlegraphic{\hfill\includegraphics[scale=0.29]{images/logo.png}}
-
-\definecolor{bgg}{HTML}{FBFBFB}
-%\def\gcolor{bgg}    % while presenting
-\def\gcolor{black} % while developing
-
-\def\tikzpicdim{
-  \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
-  \draw[step=1cm, color=\gcolor] (0,0) grid (12,7);
-}
-
-\let\tikzpicdimlarge\tikzpicdim
-
-\def\myurl{\hfil\penalty 100 \hfilneg \hbox}
-
-\metroset{titleformat=regular}
-\metroset{inner/sectiontitleformat=regular}
-\metroset{outer/frametitleformat=regular}
-\metroset{block=fill}
-
-
-\newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
-\newcommand\sectionDarkSpecial[1]{{\metroset{background=dark} \section*{#1} }}
-
-\begin{document}
+\end{frame}
 
 
-
-\maketitle
+\begin{frame}
+  AQUÍ EXPLICACIÓN DE LA TEORÍA DE LOS MUNDOS (estructuras de Kipler)
+\end{frame}
 
 \sectionDarkSpecial{Ejemplo}
 \begin{frame}
@@ -66,14 +61,18 @@
   
   \begin{columns}
     \begin{column}{0.55\textwidth}
-      \onslide<1->{Suponemos que existen \alert{tres cartas} (1, 2 y 3):\\
-        -- Alicia tiene una carta en la mano.\\
-        -- Otra bocabajo en la mesa.\\
-        -- La última se devuelve al montón.\\
-      }
+      Suponemos que existen \alert{tres cartas} (1, 2 y 3):\\
+      -- Alicia tiene una carta en la mano.\\
+      -- Otra bocabajo en la mesa.\\
+      -- La última se devuelve al montón.\\
+      
       \vspace{0.5cm}
       \only<1,2>{\textbf{¿Cuáles son los estados relevantes?}}
       \only<3,4,5>{\textbf{¿Qué información tiene Alicia?}}
+      \only<6->{
+        $H_i \myeq $ ``Alicia tiene la carta $i$''\\
+        $T_i \myeq $ ``La carta $i$ está en la mesa''\\
+      }
     \end{column}
     \begin{column}{0.55\textwidth}
       \begin{tikzpicture}[scale=1.25, transform shape]
@@ -106,4 +105,11 @@
 
 
 
-\end{document}
+
+%
+%
+%%%
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "./carcasa.tex"
+%%% End:

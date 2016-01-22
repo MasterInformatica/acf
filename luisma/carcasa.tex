@@ -1,0 +1,92 @@
+\documentclass[10pt]{beamer}
+\usetheme{m}
+
+\usepackage{times}
+\usepackage{tikz}
+\usetikzlibrary{arrows,shapes}
+\usepackage{siunitx}
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{fancyvrb}
+\usepackage{xspace}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+%\usepgfplotslibrary{dateplot}
+
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}
+
+\usepackage{listings}
+\usepackage{pgfplots}
+
+
+
+%----------------------------------------------------------------------
+% Grid para dibujar
+\definecolor{bgg}{HTML}{FBFBFB}
+\def\gcolor{bgg}    % while presenting
+%\def\gcolor{black} % while developing
+
+\def\tikzpicdim{
+  \draw[step=0.1cm, color=\gcolor] (0,0) grid (12,7);
+  \draw[step=1cm, color=\gcolor] (0,0) grid (12,7);
+}
+
+\let\tikzpicdimlarge\tikzpicdim
+
+\def\myurl{\hfil\penalty 100 \hfilneg \hbox}
+
+%----------------------------------------------------------------------
+% Comandos propios para mejorar latex
+
+
+\newcommand\myeq{\stackrel{def}{=}}
+\newcommand\K{\textbf{K}}
+\newcommand\M{\textbf{M}}
+\newcommand\MM{\mathcal{M}}
+\let\mor\vee
+\let\mand\wedge
+
+
+%----------------------------------------------------------------------
+% Modificaciones del template
+\metroset{titleformat=regular}
+\metroset{inner/sectiontitleformat=regular}
+\metroset{outer/frametitleformat=regular}
+\metroset{block=fill}
+\newcommand\sectionDark[1]{{\metroset{background=dark} \section{#1} }}
+\newcommand\sectionDarkSpecial[1]{{\metroset{background=dark} \section*{#1} }}
+
+
+%----------------------------------------------------------------------
+% Portada
+\title{Lógica Epistémica}
+\subtitle{}
+\date{25 de enero de 2016}
+\author{Luis María Costero Valero}
+\institute{ACF - UCM}
+
+%\titlegraphic{\hfill\includegraphics[scale=0.29]{images/logo.png}}
+%----------------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+\input{main.tex}
+
+
+
+\end{document}
+
+
+%
+%
+%%%
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "./carcasa.tex"
+%%% End:

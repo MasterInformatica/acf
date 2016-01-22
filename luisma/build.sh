@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SRC="main.tex"
+SRC="carcasa.tex"
 
 [ $# -gt 0 ] && SRC=$1
 
