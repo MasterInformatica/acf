@@ -51,60 +51,106 @@
 \end{frame}
 
 
+%%%%%%%%%%%%%%%%%%%%%%%
+% Kripke's structures %
+%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
-  \frametitle{Modelo de mundos posibles}
+  \frametitle{Modelo de mundos posibles\footnote{Formalización: Estructuras
+    de Kripke}}
   \begin{center}{ $ \MM =\,< W, R, V >$}\end{center}
+  \vspace{0.1cm}
+  \begin{tabular}{ll}
+    $W = \{w_1, w_2, w_3, \ldots \}$& Conjunto de mundos (o estados)
+                                      posibles. \\
+    $ R \subseteq W \times W $ & Operador de relación entre
+                            mundos. \\
+    $ V: \varphi \rightarrow W' \subseteq W $ & En qué mundos es cierta una fórmula. \\
+  \end{tabular}
+  
 
-     $W = \{w_1, w_2, w_3, \ldots \}$ : Conjunto de mundos (o estados)
-     posibles. \\
-     $R =  \prescript{}{i}{R}_j$ : Operador de relación entre mundos (o estados). \\
-
-
+  \vspace{1cm}
+  
   \begin{block}{Ejemplo:}
-    \begin{minipage}{.4\linewidth}%
-      $p = $ ``Hoy es viernes''\\
-      $q = $ ``Hoy es sábado''\\
-    \end{minipage}%
-    \begin{minipage}{.6\linewidth}%
-    \end{minipage}%
+    \begin{columns}
+      \begin{column}{0.3\textwidth}
+        \vspace{0.2cm} 
+        \mbox{$p = $ ``Hoy es viernes''}\\ 
+        \mbox{$q = $ ``Hoy es sábado''}
+        \vspace{1.5cm}
+      \end{column}
+      \begin{column}{0.5\textwidth}
+        \vspace{1.3cm}
+        \begin{tikzpicture}[scale=1]
+          \node [] (K) at (0.0, 0.6) {$\textbf{K} ( p \vee q ) $};
+          \node [] (p) at (3, 1.2) {$X \cup \{p\}$};
+          \node [] (q) at (3.0, 0.0) {$X \cup \{q\}$};
+          
+          \draw [line width = 0.25mm, ->] (K) -- (p);
+          \draw [line width = 0.25mm, ->] (K) -- (q);
+        \end{tikzpicture}
+      \end{column}
+    \end{columns}
   \end{block}
 \end{frame}
 
-\sectionDarkSpecial{Ejemplo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sectionDarkSpecial{Ejemplo} %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{frame}
   \frametitle{Ejemplo}
-  
   \begin{columns}
     \begin{column}{0.55\textwidth}
       Suponemos que existen \alert{tres cartas} (1, 2 y 3):\\
       -- Alicia tiene una carta en la mano.\\
-      -- Otra bocabajo en la mesa.\\
+      -- Otra está bocabajo en la mesa.\\
       -- La última se devuelve al montón.\\
       
-      \vspace{0.5cm}
-      \only<1,2>{\textbf{¿Cuáles son los estados relevantes?}}
-      \only<3,4,5>{\textbf{¿Qué información tiene Alicia?}}
-      \only<6->{
-        $H_i \myeq $ ``Alicia tiene la carta $i$''\\
-        $T_i \myeq $ ``La carta $i$ está en la mesa''\\
-      }
+      %-- Dynamic text
+      \begin{overlayarea}{\textwidth}{4cm}
+        \vspace{0.5cm}
+        %-- Con numeros
+        \only<2,3>{\textbf{¿Cuáles son los estados relevantes?}\\}
+        \only<4,5,6>{\textbf{¿Qué información tiene Alicia?}\\}
+        \only<7,8>{
+          $H_i \myeq $ ``Alicia tiene la carta $i$''\\
+          $T_i \myeq $ ``La carta $i$ está en la mesa''\\
+
+          \begin{align*}
+            \text{Ej.:} & V(H_1) = \{ w_1, w_2\}\\
+                        & V(T_2) = \{ w_1, w_6 \} \\
+          \end{align*}          
+        }        
+        %-- Con propiedades
+        \only<9->{
+          Supongamos que Alicia recibe la carta 1, y la carta 2 está en la mesa.
+        }
+        \begin{itemize}[<+(9)->]
+        \item[]
+        \item[] $\MM, w_1 \models \K H_1$
+        \item[] $\MM, w_1 \models \K \neg T_1$
+        \item[] $\MM, w_1 \models \K (T_2 \mor T_3)$
+        \end{itemize}
+      \end{overlayarea}
+
     \end{column}
     \begin{column}{0.55\textwidth}
-      \begin{tikzpicture}[scale=1.25, transform shape]
-        \visible<2->{
+      % -- Números
+      \only<3-7>{
+        \begin{tikzpicture}[scale=1, transform shape]
           \tikzstyle{every node} = [circle, fill=gray!30, draw=gray!90] 
-          \node [label=below left:\scriptsize$w1$] (w1) at (0.0, 4.0) {$\{1,2\}$};
-          \node [label=below right:\scriptsize$w4$] (w4) at (1.7, 4.0) {$\{2,1\}$};
+          \node [label=below left:\scriptsize$w1$] (w1) at (0.0, 4) {$\{1,2\}$};
+          \node [label=below right:\scriptsize$w4$] (w4) at (2, 4) {$\{2,1\}$};
           \node [label=below left:\scriptsize$w2$] (w2) at (0.0, 2.0) {$\{1,3\}$};
-          \node [label=below right:\scriptsize$w5$] (w5) at (1.7, 2.0) {$\{3,1\}$};
+          \node [label=below right:\scriptsize$w5$] (w5) at (2, 2.0) {$\{3,1\}$};
           \node [label=below left:\scriptsize$w3$] (w3) at (0.0, 0.0) {$\{2,3\}$};
-          \node [label=below right:\scriptsize$w6$] (w6) at (1.7, 0.0) {$\{3,2\}$};
-          \visible<4->{
+          \node [label=below right:\scriptsize$w6$] (w6) at (2, 0.0) {$\{3,2\}$};
+          \visible<5->{
             \draw [line width = 0.25mm, <->] (w1) -- (w2);
             \draw [line width = 0.25mm, <->] (w3) -- (w4);
             \draw [line width = 0.25mm, <->] (w5) -- (w6);
           }
-          \visible<5->{
+          \visible<6->{
             \path [->] (w1) edge[loop left] ();
             \path [->] (w2) edge[loop left] ();
             \path [->] (w3) edge[loop left] ();
@@ -112,8 +158,40 @@
             \path [->] (w5) edge[loop right] ();
             \path [->] (w6) edge[loop right] ();
           }
-        }
-      \end{tikzpicture}
+        \end{tikzpicture}
+      }
+      % -- Prop
+
+      \only<8->{
+        \begin{tikzpicture}[scale=0.8, transform shape]
+          \tikzstyle{every node} = [circle, fill=gray!30, draw=gray!90] 
+          \only<-9>{\node [label=below left:\scriptsize$w1$] (w1) at (-0.2, 4.4) {$\{H_1,T_2\}$};}
+          \only<10>{\node [label=below left:\scriptsize$w1$, line
+            width=0.04cm, draw=black!100] (w1) at (-0.2, 4.4) {$\{H_1,T_2\}$};}
+          \only<11->{\node [label=below left:\scriptsize$w1$, line
+            width=0.04cm, draw=black!100, fill=blue!30] (w1) at (-0.2, 4.4) {$\{H_1,T_2\}$};}
+          \node [label=below right:\scriptsize$w4$] (w4) at (2.2, 4.4) {$\{H_2,T_1\}$};
+          \only<-10>{\node [label=below left:\scriptsize$w2$] (w2) at
+            (-0.2, 2.0) {$\{H_1,T_3\}$};}
+          \only<11->{\node [label=below left:\scriptsize$w2$, fill=blue!30] (w2) at (-0.2, 2.0) {$\{H_1,T_3\}$};}
+          \node [label=below right:\scriptsize$w5$] (w5) at (2.2, 2.0) {$\{H_3,T_1\}$};
+          \node [label=below left:\scriptsize$w3$] (w3) at (-0.2, -0.4) {$\{H_2,T_3\}$};
+          \node [label=below right:\scriptsize$w6$] (w6) at (2.2, -0.4) {$\{H_3,T_2\}$};
+
+          \only<-10>{\draw [line width = 0.25mm, <->] (w1) -- (w2);}
+          \only<11->{\draw [line width = 0.25mm, <->, draw=blue!100] (w1) -- (w2);}
+          \draw [line width = 0.25mm, <->] (w3) -- (w4);
+          \draw [line width = 0.25mm, <->] (w5) -- (w6);
+          
+          \only<-10>{\path [->] (w1) edge[loop left] ();}
+          \only<11->{\path [->, draw=blue!100] (w1) edge[loop left] ();}
+          \path [->] (w2) edge[loop left] ();
+          \path [->] (w3) edge[loop left] ();
+          \path [->] (w4) edge[loop right] ();
+          \path [->] (w5) edge[loop right] ();
+          \path [->] (w6) edge[loop right] ();
+        \end{tikzpicture}
+      }
     \end{column}
   \end{columns}
 \end{frame}
