@@ -1,13 +1,14 @@
 #!/bin/bash
 
+SRC="main.tex"
 
-SRC=$1
+[ $# -gt 0 ] && SRC=$1
 
 pdflatex -shell-escape $SRC
 pdflatex -shell-escape $SRC
 
 
-FICH="${1%.*}"
+FICH="${SRC%.*}"
 echo $FICH
 
 #Borramos lo que genera y no queremos
