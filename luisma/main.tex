@@ -13,13 +13,13 @@
 
 %===================================
 \sectionDark{Lógica epistémica} %===
-%===================================
+% ===================================
 \begin{frame}
   \frametitle{Lógica epistémica (1 agente)}
   \vspace{0.8cm}
   \begin{columns}
     \begin{column}{0.5\textwidth}
-      Lógica preposicional:
+      Lógica proposicional:
       \begin{itemize}
       \item $p, q, \cdots \in \mathcal{P}$
       \item $\varphi,\quad \neg\varphi,\quad \varphi\mor\psi,\quad \varphi\mand\psi$
@@ -38,21 +38,36 @@
   \end{columns}
   \vspace{1cm}
   \visible<3->{
-    Algunos ejemplos:
     \begin{align*}
-      \K(\varphi \rightarrow \psi): & $\hspace{0.3cm} "Se sabe que $\varphi$ implica $\psi$"$\\
-      \K \varphi \mor \K \neg \varphi: & $\hspace{0.3cm} "Se sabe que
-                                         $\varphi$ o $\neg\varphi$"$\\
-      \K \varphi \mor \neg \K \varphi:  &$\hspace{0.3cm} "Puede que se sepa
-                                          o no que $\varphi$"$\\
+      \K(\varphi \rightarrow \psi): & \hspace{0.3cm} \text{``Se sabe que }
+                                      \varphi \text{ implica } \psi\text{'' }\\
+      \K \varphi \mor \K \neg \varphi: & \hspace{0.3cm} \text{``Se sabe que }
+                                         \varphi \text{ o }
+                                         \neg\varphi\text{'' } \\
+      \K \varphi \mor \neg \K \varphi:  &\hspace{0.3cm} \text{``Puede que se sepa
+                                          o no que }\varphi \text{'' } \\
     \end{align*}
   }
-
 \end{frame}
 
 
 \begin{frame}
-  AQUÍ EXPLICACIÓN DE LA TEORÍA DE LOS MUNDOS (estructuras de Kipler)
+  \frametitle{Modelo de mundos posibles}
+  \begin{center}{ $ \MM =\,< W, R, V >$}\end{center}
+
+     $W = \{w_1, w_2, w_3, \ldots \}$ : Conjunto de mundos (o estados)
+     posibles. \\
+     $R =  \prescript{}{i}{R}_j$ : Operador de relación entre mundos (o estados). \\
+
+
+  \begin{block}{Ejemplo:}
+    \begin{minipage}{.4\linewidth}%
+      $p = $ ``Hoy es viernes''\\
+      $q = $ ``Hoy es sábado''\\
+    \end{minipage}%
+    \begin{minipage}{.6\linewidth}%
+    \end{minipage}%
+  \end{block}
 \end{frame}
 
 \sectionDarkSpecial{Ejemplo}
