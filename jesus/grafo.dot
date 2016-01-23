@@ -1,0 +1,46 @@
+digraph pagos{
+	M [label="Métodos de Pago electrónico"];
+	On [label="Dinero Online"];
+	Off [label="Dinero Offline"];
+	M -> On;
+	M -> Off;
+
+	M2 [label="Moneda"];
+	Off -> M2;
+	M2 -> BTC [style=dashed];
+	M2 -> LTC [style=dashed];
+	EUR [label="€"];
+	M2 -> EUR [style=dashed];
+	Val [label="Vales"];
+	Off -> Val;
+	Pts [label="Puntos"];
+	Off -> Pts;
+	
+	Dv [label="Dinero Virtual"];
+	Tj [label="Tarjeta"];
+	Mv [label="Móvil"];
+	CC [label="Cuenta Bancaria"];
+	On -> Dv;
+	On -> Tj;
+	On -> Mv;
+	On -> CC;
+	Cr [label="Crédito"];
+	Db [label="Débito"];
+	Tj -> Cr;
+	Tj -> Db;
+	Mv -> Tj;
+	Mv -> Dv;
+	Cr -> CC;
+	Db -> CC;
+	Dv -> Tj;
+	Dv -> Mon;
+	Mon [label="Monedero"];
+	Mon -> twyp [style=dashed];
+	Mon -> Paypal [style=dashed];
+	Mon -> Egold [style=dashed];
+	Mon -> Hoopay [style=dashed];
+	Mon -> StormPay [style=dashed];
+	
+	
+	
+}
