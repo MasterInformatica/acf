@@ -3,8 +3,9 @@
 
 \usepackage{times}
 \usepackage{tikz}
-\usetikzlibrary{arrows,shapes}
+\usetikzlibrary{arrows,shapes,trees}
 \usepackage{siunitx}
+\usepackage{tikz-qtree}
 
 \usepackage{bussproofs}
 
@@ -41,6 +42,10 @@
 \let\tikzpicdimlarge\tikzpicdim
 
 \def\myurl{\hfil\penalty 100 \hfilneg \hbox}
+
+
+
+\tikzset{hide on/.code={\only<#1>{\color{white}}}}
 
 %----------------------------------------------------------------------
 % Comandos propios para mejorar latex

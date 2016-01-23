@@ -275,6 +275,55 @@
 
 \end{frame}
 
+\begin{frame}[shrink]
+  \frametitle{$\K\varphi \rightarrow \K\,\K\,\varphi$ \qquad (Lógica S4)}
+  \begin{columns}
+    \begin{column}{0.4\textwidth}
+      % -- tableau
+      \begin{tikzpicture}[level distance=1.1cm, edge from parent/.style={draw,-latex}]
+        \only<16>{}
+        \node {$\neg(\K\,\varphi \rightarrow \K\K\,\varphi),\,0$}
+        child [hide on=-1] {node {$\K\,\varphi,\,0$}
+          child [hide on=-1] {node {$\neg\K\K\varphi,\,0$} 
+            child [hide on=-2]{node {$\M\neg\K\varphi,\,0$}
+              child [hide on=-3]{node {$\neg\K\varphi,\,1$} 
+                child [hide on=-4]{node {$\M\neg\varphi\,1$}
+                  child [hide on=-5]{node {$\neg\varphi,\, 2$ } 
+                    child [hide on=-6]{node  {$\varphi,\, 2$} 
+                      edge from parent [->] node [left] {\tiny $0R2$} 
+                    }
+                    edge from parent [->] node [left] {\tiny $1R2$} 
+                  }
+                } 
+                edge from parent [->] node [left] {\tiny $0R1$}                  
+              } 
+            } 
+          } 
+        };
+      \end{tikzpicture}      
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \only<2>{
+        $(p \rightarrow q) \myeq (\neg p \mor q)$\\
+        
+        $\neg(p \mor q) = (\neg p \mand \neg q)$
+      }
+      \only<3>{
+        $\M\varphi \myeq \neg\K\neg\varphi$}
+      \only<4>{
+        \centering
+        (Regla $\M$)\\
+        $(\M\varphi,\,i)\quad iRj \quad (\varphi,\,j)$}
+      \only<5>{
+        $\M\varphi \myeq \neg\K\neg\varphi$}
+      \only<6>{
+        \centering
+        (Regla $\M$)\\
+        $(\M\varphi,\,i)\quad iRj \quad (\varphi,\,j)$}
+    \end{column}
+  \end{columns}
+
+\end{frame}
 %
 %
 %%%
