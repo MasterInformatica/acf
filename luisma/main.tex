@@ -198,6 +198,82 @@
 
 
 
+%%%%%%%%%%%
+% Demostraciones
+\sectionDark{Demostraciones (Tableaux)}
+%%%%%%%%%%%
+
+\begin{frame}
+  \frametitle{Axiomas}
+  
+  \begin{table}
+    \centering
+    \begin{tabular}{lll} \toprule
+      Lógica & Condición & Axioma \\ \midrule
+      K & - & $\K ( \varphi \rightarrow \psi) \rightarrow (\K
+                           \varphi \rightarrow \K \psi)$\\
+      T & Reflexiva & $ \K\,\varphi \rightarrow \varphi $\\
+      B & Reflexiva, simétrica & $ \varphi \rightarrow \K\,\M\,\varphi$\\
+      4 & Transitiva & $ \K \varphi \rightarrow \K\,\K\,\varphi$\\
+      5 & Euclídea & $ \M \varphi \rightarrow \K\,\M\,\varphi$\\
+      \bottomrule
+    \end{tabular}
+  \end{table}
+  
+  Según que axiomas se acepten, se dan distintos tipos de sistemas:
+  \begin{itemize}
+  \item K4
+  \item K5
+  \item S4 = KT4
+  \item S5 = KT5
+  \end{itemize}
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{Reglas para tableaux epistémicos}
+  \begin{table}
+    \centering
+    \begin{tabular}{lcccc} \toprule
+      \vspace{0.4cm}Nombre & (K) & (T) & (S4) & (5) \\ 
+      \vspace{0.2cm}Regla &       
+              \AxiomC{$\K\,X;\neg\K\,\varphi$}
+              \UnaryInfC{$X;\neg\varphi$}
+              \DisplayProof
+            &
+              \AxiomC{$X;\K\,\varphi$}
+              \UnaryInfC{$X;\{\K\,\varphi,\varphi\}$}
+              \DisplayProof
+            &
+              \AxiomC{$\K\,X;\neg\K\,\varphi$}
+              \UnaryInfC{$\K\,X;\neg\varphi$}
+              \DisplayProof
+            &
+              \AxiomC{$X;\neg\K\,\varphi$}
+              \UnaryInfC{$X;\neg\K\,\varphi;\K\neg\K\varphi$}
+              \DisplayProof\\ \bottomrule
+    \end{tabular}
+  \end{table}
+
+  \visible<2->{
+    \begin{table}
+      \centering
+      \begin{tabular}{cccc} \toprule
+        \vspace{0.4cm}Dualidad & Dualidad & Regla $\K$ & Regla $\M$  \\
+        $\neg \K\,\varphi,\,i$ &$\neg\M\,\varphi,\,i$ & $\K\,\varphi,\,i$
+                                                       &$\M\,\varphi,\,i$
+        \\
+        $\downarrow$ & $\downarrow$ & iRj & iRj \\
+        $\M\neg\varphi,\,i$&
+                             $\K\neg\varphi,\,i$&$\downarrow$&$\downarrow$\\
+        &&$\varphi,\,j$&$\varphi,\,j$\\
+                                                  
+        \\ \bottomrule
+      \end{tabular}
+    \end{table}
+  }
+
+\end{frame}
 
 %
 %
