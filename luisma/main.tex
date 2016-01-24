@@ -283,7 +283,7 @@
     \begin{column}{0.4\textwidth}
       % -- tableau
       \begin{tikzpicture}[level distance=1.1cm, edge from parent/.style={draw,-latex}]
-        \only<16>{}
+        \only<7>{}
         \node {$\neg(\K\,\varphi \rightarrow \K\K\,\varphi),\,0$}
         child [hide on=-1] {node {$\K\,\varphi,\,0$}
           child [hide on=-1] {node {$\neg\K\K\varphi,\,0$} 
@@ -332,6 +332,114 @@
 % Multiagente
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+\begin{frame}
+  \frametitle{Lógica epistémica multiagente}
+  \begin{align*}
+    \Ag = \{ 1, 2, \ldots, n \} & \text{\qquad n agentes.}\\
+    \K_i\,\varphi,\quad i \in \Ag & \text{\qquad El agente $i$ conoce $\varphi$}\\
+  \end{align*}
+  
+  \visible<2->{
+    \begin{align*}
+      \K_A\K_B\varphi & \quad\text{Alice sabe que Bob sabe } \varphi \\
+      \K_A(\K_B\varphi \mor \K_B\neg\varphi) & \quad\text{Alice sabe que Bob %
+                                               sabe } \varphi \text{ o }%
+                                               \neg\varphi\\
+      \neg\K_B\K_A\K_B\varphi & \quad \text{ Bob no sabe que Alice sabe que Bob
+                                conoce } \varphi
+    \end{align*}
+
+  }
+\end{frame}
+
+\begin{frame}
+  \frametitle{The Muddy Children Puzzle}
+  \begin{itemize}
+  \item \alert{n niños} vuelven de jugar en el parque.
+  \item El padre les dice: ``Al menos unos de vosotros tiene la cabeza
+    llena de barro. Dad un paso al frente''
+  \item Un niño puede ver la cabeza de sus hermanos, pero no la suya
+    propia.
+  \item El padre repite \alert{k veces} la misma frase.
+  \item Tras k repeticiones, todos los niños sucios levantan la mano a la vez.
+  \end{itemize}
+
+
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{The Muddy Children Puzzle (n=3)}
+  
+        \begin{tikzpicture}[scale=1.5]
+          \node [] (K1) at (0.0, 0.0) {$(0,0,0)$};
+          \node [] (K2) at (3, 0.0) {$(1,0,0)$};
+          \node [] (K3) at (4, 1.0) {$(1,0,1)$};
+          \node [] (K4) at (1.0, 1.0) {$(0,0,1)$};
+          \node [] (K5) at (0.0, 2.0) {$(0,1,0)$};
+          \node [] (K6) at (3, 2.0) {$(1,1,0)$};
+          \node [] (K7) at (1.0, 3.0) {$(0,1,1)$};
+          \node [] (K8) at (4, 3.0) {$(1,1,1)$};
+
+          \draw [line width = 0.25mm, <->] (K7) -- (K4) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {2};          
+          \draw [line width = 0.25mm, <->] (K1) -- (K2)  node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {1};
+          \draw [line width = 0.25mm, <->] (K1) -- (K4) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {3};
+          \draw [line width = 0.25mm, <->] (K1) -- (K5) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {2};
+          \draw [line width = 0.25mm, <->] (K6) -- (K5) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {1};
+
+          \draw [line width = 0.25mm, <->] (K6) -- (K8) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {3};
+          \draw [line width = 0.25mm, <->] (K7) -- (K5) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {3};
+          \draw [line width = 0.25mm, <->] (K7) -- (K8) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {1};
+
+          \draw [line width = 0.25mm, <->] (K3) -- (K4) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {1};
+          \draw [line width = 0.25mm, <->] (K3) -- (K2) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {3};
+          \draw [line width = 0.25mm, <->] (K3) -- (K8) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {2};
+          \draw [line width = 0.25mm, <->] (K6) -- (K2) node[shape=circle,draw=gray!60,fill=white!100,font=\scriptsize,midway] {2};
+        \end{tikzpicture}  
+\end{frame}
+
+
+\begin{frame}
+  \frametitle{The Muddy Children Puzzle (n=2)}
+  \begin{block}{Supongamos que:}
+    -- Solo hay dos niños (1 y 2). Los dos tienen la cabeza sucia $(1,1)$.\\
+    -- $p \myeq \text{El niño 1 tiene la cabeza sucia}.$\\
+    -- $q \myeq \text{El niño 2 tiene la cabeza sucia}.$
+  \end{block}
+  \vspace{1cm}
+  
+  \begin{itemize}[<+(1)->]
+  \item $\K_1q\quad \quad\K_1(\K_2p \mor \K_2\neg p)\quad y \quad \K_1\neg\K_2q$
+  \item Padre: \emph{``Al menos uno tiene la cabeza sucia''}.
+  \item $\K_1(p \mor q)\quad y \quad \K_1\K_2(p \mor q)$
+   
+  \end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sectionDark{Conclusiones} %%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}
+  \frametitle{Conclusiones}
+  
+  \begin{center}
+    \smartdiagram[bubble diagram]{$\LL\K$, {Conocimiento\\distribuido},
+      {Toma de\\decisiones},{Algoritmos del\\lenguaje},{Sistemas
+        de\\tutor expertos},{Sistemas\\distribuidos}}
+  \end{center}
+
+\end{frame}
+
+
+
+%% FIN
+{
+\usebackgroundtemplate{\includegraphics[width=\paperwidth, height=\paperheight]{images/questions.jpg}}
+\begin{frame}[plain]
+\end{frame}
+}
 
 
 %
