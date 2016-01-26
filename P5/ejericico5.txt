@@ -1,6 +1,6 @@
 Hay reglas que no pueden sustituirse por una ecuación independientemente de
 la propiedad que estemos considerando. Los motivos que impiden la
-transformación junto con las reglas son (una regla que no se pueda
+transformación junto con las reglas son (si una regla que no se puede
 transformar por varios motivos, solo se muestra en uno de los casos):
 
 a) Reglas no terminantes: 
@@ -17,7 +17,7 @@ b) Reglas no confluentes:
     produciendo dos estados finales distintos.
 
   - [refresco-botellon-ajeno], [cubata-botellon-ajeno] : Desde el mismo
-    estado puede decidir consumir un refreso, o acompañarlo de alcohol,
+    estado puede decidir consumir un refresco, o acompañarlo de alcohol,
     produciendo dos estados finales distintos.
 
   - [refresco-local], [copa-local]: Desde un mismo estado, una persona
@@ -37,7 +37,7 @@ c) Reglas no coherentes:
 d) Reglas no invisibles
 La única regla que se podría transformar en ecuación sería la regla
 [cola-to-local-ok]. Para que se pueda transformar, tendría que ser
-invisible respecto a las propiedades. A continaución se muestran las
+invisible respecto a las propiedades. A continuación se muestran las
 propiedades en las que no se podría transformar esta regla en ecuación:
 
 Sólo hay problemas para las propiedades: P3, P4 y P5
@@ -61,10 +61,10 @@ P6) Si una persona ha bebido demasiado:
 Entrar en el local no te hace beber y además no te dejan entrar bebido.
 
 P7) Si queda hielo en la zona de botellón:
-No se modificia el hielo en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
+No se modifica el hielo en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
 
 P8) Si quedan refrescos en la zona de botellón:
-No se modifician los refrescos en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
+No se modifican los refrescos en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
 
 P9) Si queda alcohol en la zona de botellón:
-No se modificia el alcohol en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.
+No se modifica el alcohol en el botellón, la persona tira la bolsa pero ya no estaba en el botellón al entrar en la cola.

@@ -413,12 +413,12 @@ red modelCheck(inicio2, hayMenosPersonasLocal(6) -> [] hayMenosPersonasLocal(6))
 red modelCheck(inicio, [] ( estaEnCola("Lucille") -> <> estaEnLocal("Lucille"))) .
 
 *** El alcohol nunca se acaba.
-***( La ejecucion da cierta para este estado en concreto, ya que hay una menor que tiene más alcohol que refrescos, por lo que el el alcohol nunca se va a cabar. Y además, al ser menor no se va de la fiesta. Sin embargo, esta regla podría ser falsa en otros estados de inicio (por ejemplo, eliminando a la menor de la fiesta) )
+***( La ejecucion da cierta para este estado en concreto, ya que hay una menor que tiene más alcohol que refrescos, por lo que el alcohol nunca se va a acabar. Y además, al ser menor no se va de la fiesta. Sin embargo, esta regla podría ser falsa en otros estados de inicio (por ejemplo, eliminando a la menor de la fiesta) )
 red modelCheck(inicio, [] (hayAlcoholBotellon \/ ~ noAlcoholLocal) ) .
 
 *** Los refrescos siempre se acaban.
 ***( Falso. La gente se puede ir del local sin haber gastado todos los refrescos del mismo)
-red modelCheck(inicio, <> (~ hayRefrescoBotellon /\ noRefrescosLocal )) .
+red modelCheck(inicio, [] <> (~ hayRefrescoBotellon /\ noRefrescosLocal )) .
 
 *** Si en algún momento alguien bebe de más, y permanece en ese estado
 *** para siempre.
